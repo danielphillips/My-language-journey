@@ -354,3 +354,33 @@ Test Suite 'All tests' passed at 2026-11-01 19:23:04.043
 error: Build failed
 error: fatalError
 ```
+
+### Slice 7 GREEN: audio storage & recording flow
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 19:24:29.191
+Test Suite 'All tests' passed at 2026-11-01 19:24:29.191
+✔ Suite "Exam date" passed after 0.013 seconds.
+✔ Suite "Goal progress" passed after 0.014 seconds.
+✔ Suite "Study statistics" passed after 0.014 seconds.
+✔ Suite "Russian text handling" passed after 0.013 seconds.
+✔ Suite "Study session validation" passed after 0.013 seconds.
+✔ Suite "Roadmap progress" passed after 0.014 seconds.
+✔ Suite "Goal settings" passed after 0.013 seconds.
+✔ Suite "Proficiency levels" passed after 0.013 seconds.
+✔ Suite "Study categories" passed after 0.014 seconds.
+✔ Suite "Audio file store" passed after 0.013 seconds.
+✔ Suite "Vocabulary query" passed after 0.013 seconds.
+✔ Suite "Reference languages" passed after 0.013 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.014 seconds.
+✔ Suite "Confidence levels" passed after 0.014 seconds.
+✔ Suite "Milestone catalogue" passed after 0.014 seconds.
+✔ Suite "Study timer" passed after 0.014 seconds.
+✔ Suite "Pronunciation notes" passed after 0.014 seconds.
+✔ Suite "Duplicate detection" passed after 0.014 seconds.
+✔ Suite "Milestone status" passed after 0.014 seconds.
+✔ Suite "Recording flow" passed after 0.018 seconds.
+✔ Test run with 113 tests in 20 suites passed after 0.020 seconds.
+```
