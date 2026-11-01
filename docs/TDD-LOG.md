@@ -392,3 +392,55 @@ Test Suite 'All tests' passed at 2026-11-01 19:24:29.191
 Xcode 26 and an iOS simulator, which this Linux environment doesn't have, so the expected RED
 (missing `AppModelContainer`, `VocabularyService`, `StudyLog`, `GoalStore`, `MilestoneStore`,
 `LiveTimerStore` and the UI) **could not be executed or captured here**.
+
+### REFACTOR: public RecordingResult init, nonisolated importRecording (app integration)
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 19:39:15.625
+Test Suite 'All tests' passed at 2026-11-01 19:39:15.625
+✔ Suite "Reference languages" passed after 0.016 seconds.
+✔ Suite "Confidence levels" passed after 0.016 seconds.
+✔ Suite "Roadmap progress" passed after 0.016 seconds.
+✔ Suite "Milestone status" passed after 0.016 seconds.
+✔ Suite "Study session validation" passed after 0.016 seconds.
+✔ Suite "Milestone catalogue" passed after 0.016 seconds.
+✔ Suite "Russian text handling" passed after 0.016 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.016 seconds.
+✔ Suite "Proficiency levels" passed after 0.016 seconds.
+✔ Suite "Duplicate detection" passed after 0.016 seconds.
+✔ Suite "Goal settings" passed after 0.016 seconds.
+✔ Suite "Goal progress" passed after 0.016 seconds.
+✔ Suite "Study categories" passed after 0.016 seconds.
+✔ Suite "Study statistics" passed after 0.016 seconds.
+✔ Suite "Exam date" passed after 0.016 seconds.
+✔ Suite "Audio file store" passed after 0.017 seconds.
+✔ Suite "Vocabulary query" passed after 0.016 seconds.
+✔ Suite "Study timer" passed after 0.016 seconds.
+✔ Suite "Pronunciation notes" passed after 0.016 seconds.
+✔ Suite "Recording flow" passed after 0.019 seconds.
+✔ Test run with 113 tests in 20 suites passed after 0.020 seconds.
+```
+
+### Slice 8 GREEN (app layer): partial verification on Linux
+
+The app layer (SwiftData models, services, SwiftUI, AVFoundation) can't be compiled without Xcode.
+What could be verified here:
+
+- `swiftc -parse` over all 24 app, unit-test and UI-test files: **no syntax errors**.
+- `LiveTimerStore` and `DurationFormat` compiled for real against MyRussianCore in a scratch package,
+  running the unchanged `MyRussianTests/LiveTimerStoreTests.swift`:
+
+```
+✔ Test pauseAndDiscardArePersisted() passed
+✔ Test runningTimerSurvivesTermination() passed
+✔ Suite "Live timer persistence" passed
+```
+
+- Reviewing the app code against the core API exposed two integration defects, fixed as a core
+  refactor (all 113 core tests still green): `RecordingResult` lacked a public initialiser, and
+  `RecordingFlow.importRecording` needed to be `nonisolated` for the async import path.
+
+**Still unverified:** `PersistenceTests` (SwiftData) and `CriticalJourneyUITests` (XCUITest) need
+Xcode 26 and an iOS 26 simulator. Run them with `⌘U` in Xcode.

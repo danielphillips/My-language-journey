@@ -23,6 +23,16 @@ public struct RecordingResult: Equatable, Sendable {
     public let createdAt: Date
     public let kind: AudioKind
     public let source: AudioSource
+
+    public init(id: UUID, relativePath: String, duration: TimeInterval, createdAt: Date,
+                kind: AudioKind, source: AudioSource) {
+        self.id = id
+        self.relativePath = relativePath
+        self.duration = duration
+        self.createdAt = createdAt
+        self.kind = kind
+        self.source = source
+    }
 }
 
 // MARK: - File storage
@@ -216,7 +226,8 @@ public final class RecordingFlow {
         if state == .permissionDenied { state = .idle }
     }
 
-    public static func importRecording(from source: URL, duration: TimeInterval, store: AudioFileStore,
+    /// Pure file work, so it can run off the main actor (e.g. after an async duration probe).
+    nonisolated public static func importRecording(from source: URL, duration: TimeInterval, store: AudioFileStore,
                                        now: Date) throws -> RecordingResult {
         let stored = try store.importAudio(from: source)
         return RecordingResult(id: UUID(), relativePath: stored.relativePath, duration: duration,
