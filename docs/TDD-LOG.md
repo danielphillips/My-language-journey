@@ -210,3 +210,55 @@ error: SwiftCompile normal x86_64 failed with a nonzero exit code. Command line:
 error: Build failed
 error: fatalError
 ```
+
+### Slice 5 GREEN: vocabulary
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 19:22:07.744
+Test Suite 'All tests' passed at 2026-11-01 19:22:07.744
+✔ Suite "Study session validation" passed after 0.008 seconds.
+✔ Suite "Milestone catalogue" passed after 0.008 seconds.
+✔ Suite "Duplicate detection" passed after 0.008 seconds.
+✔ Suite "Study statistics" passed after 0.008 seconds.
+✔ Suite "Vocabulary query" passed after 0.008 seconds.
+✔ Suite "Russian text handling" passed after 0.008 seconds.
+✔ Suite "Roadmap progress" passed after 0.008 seconds.
+✔ Suite "Confidence levels" passed after 0.008 seconds.
+✔ Suite "Exam date" passed after 0.008 seconds.
+✔ Suite "Goal progress" passed after 0.008 seconds.
+✔ Suite "Goal settings" passed after 0.008 seconds.
+✔ Suite "Study categories" passed after 0.008 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.008 seconds.
+✔ Suite "Proficiency levels" passed after 0.008 seconds.
+✔ Suite "Study timer" passed after 0.008 seconds.
+✔ Suite "Milestone status" passed after 0.008 seconds.
+✔ Test run with 84 tests in 16 suites passed after 0.009 seconds.
+```
+
+### Slice 5 REFACTOR: lexical minimum moved to ProficiencyLevel
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 19:22:26.074
+Test Suite 'All tests' passed at 2026-11-01 19:22:26.074
+✔ Suite "Study session validation" passed after 0.009 seconds.
+✔ Suite "Proficiency levels" passed after 0.009 seconds.
+✔ Suite "Confidence levels" passed after 0.009 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.009 seconds.
+✔ Suite "Study categories" passed after 0.009 seconds.
+✔ Suite "Milestone status" passed after 0.009 seconds.
+✔ Suite "Study statistics" passed after 0.009 seconds.
+✔ Suite "Milestone catalogue" passed after 0.009 seconds.
+✔ Suite "Exam date" passed after 0.009 seconds.
+✔ Suite "Roadmap progress" passed after 0.009 seconds.
+✔ Suite "Study timer" passed after 0.009 seconds.
+✔ Suite "Duplicate detection" passed after 0.009 seconds.
+✔ Suite "Goal settings" passed after 0.009 seconds.
+✔ Suite "Russian text handling" passed after 0.009 seconds.
+✔ Suite "Goal progress" passed after 0.009 seconds.
+✔ Suite "Vocabulary query" passed after 0.009 seconds.
+✔ Test run with 84 tests in 16 suites passed after 0.010 seconds.
+```

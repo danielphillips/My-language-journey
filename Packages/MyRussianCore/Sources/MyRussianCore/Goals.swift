@@ -36,6 +36,12 @@ public enum ProficiencyLevel: String, CaseIterable, Codable, Sendable, Identifia
     public var defaultEstimatedHours: Double? {
         self == .a1 ? 110 : nil
     }
+
+    /// Widely cited size of the TORFL Elementary (A1) lexical minimum. A contextual reference only:
+    /// personal entries are never checked against the official list. Other levels are left unset.
+    public var lexicalMinimumReference: Int? {
+        self == .a1 ? 780 : nil
+    }
 }
 
 /// An exam date planned to month precision, or an exact day once known.

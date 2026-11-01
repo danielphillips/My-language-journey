@@ -161,6 +161,7 @@ struct VocabularyStatisticsTests {
     }
 
     @Test func a1LexicalMinimumIsAReferenceFigureOnly() {
-        #expect(VocabularyStatistics.a1LexicalMinimumReference == 780)
+        #expect(ProficiencyLevel.a1.lexicalMinimumReference == 780)
+        #expect(ProficiencyLevel.b1.lexicalMinimumReference == nil)
     }
 }
