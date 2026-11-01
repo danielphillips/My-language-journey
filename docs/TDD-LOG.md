@@ -125,3 +125,21 @@ Test Suite 'All tests' passed at 2026-11-01 19:18:06.001
 error: Build failed
 error: fatalError
 ```
+
+### Slice 3 GREEN: study statistics & session validation
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 19:19:25.982
+Test Suite 'All tests' passed at 2026-11-01 19:19:25.982
+✔ Suite "Goal progress" passed after 0.007 seconds.
+✔ Suite "Study timer" passed after 0.007 seconds.
+✔ Suite "Study session validation" passed after 0.007 seconds.
+✔ Suite "Goal settings" passed after 0.006 seconds.
+✔ Suite "Exam date" passed after 0.007 seconds.
+✔ Suite "Proficiency levels" passed after 0.006 seconds.
+✔ Suite "Study categories" passed after 0.006 seconds.
+✔ Suite "Study statistics" passed after 0.008 seconds.
+✔ Test run with 47 tests in 8 suites passed after 0.009 seconds.
+```
