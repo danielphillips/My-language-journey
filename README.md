@@ -50,6 +50,8 @@ The Xcode project uses synchronised folders, so new files are picked up automati
 
 ## Design decisions
 
+- **App icon: «От А до Я».** The idiom means "from A to Z". Я is both the last letter of the alphabet and the Russian word for "I/me". The gold ring echoes the Journey effort ring, with a "you are here" dot. It has light, dark and tinted variants, made by `scripts/generate_app_icon.js`.
+
 - **Hours measure effort, not proficiency.** No proficiency percentage is shown. 110 h for A1 is your own planning estimate, and no hour estimates are invented for other levels.
 - **Milestones are labelled app‑authored.** Each competency shows the TORFL subtest it prepares for (vocabulary & grammar, reading, listening, writing, speaking). The ~780‑item A1 lexical minimum appears only as a reference.
 - **Pronunciation notes are stored exactly as typed.** Autocorrect is off and the text is never trimmed or normalised.
@@ -59,5 +61,4 @@ The Xcode project uses synchronised folders, so new files are picked up automati
 ## Later
 
 - **iCloud sync:** the schema already follows CloudKit's rules. Add the iCloud (CloudKit) capability and change `cloudKitDatabase: .none` to `.automatic` in `AppModelContainer`. This needs a paid Apple Developer account.
-- **App icon:** the `AppIcon` slots are empty.
 - **Swift 6 language mode** for the app target (the core package already uses it).
