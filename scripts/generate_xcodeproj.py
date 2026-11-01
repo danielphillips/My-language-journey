@@ -11,6 +11,7 @@ import pathlib
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 BUNDLE_PREFIX = "com.danielphillips"
 DEPLOYMENT_TARGET = "26.0"
+DEVELOPMENT_TEAM = "EZ89RRBK7E"
 
 
 def oid(name: str) -> str:
@@ -84,6 +85,7 @@ app_settings = {
     "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",
     "ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME": "AccentColor",
     "CODE_SIGN_STYLE": "Automatic",
+    "DEVELOPMENT_TEAM": DEVELOPMENT_TEAM,
     "CURRENT_PROJECT_VERSION": "1",
     "ENABLE_PREVIEWS": "YES",
     "GENERATE_INFOPLIST_FILE": "YES",
@@ -106,6 +108,7 @@ app_settings = {
 unit_settings = {
     "BUNDLE_LOADER": "$(TEST_HOST)",
     "CODE_SIGN_STYLE": "Automatic",
+    "DEVELOPMENT_TEAM": DEVELOPMENT_TEAM,
     "CURRENT_PROJECT_VERSION": "1",
     "GENERATE_INFOPLIST_FILE": "YES",
     "MARKETING_VERSION": "1.0",
@@ -117,6 +120,7 @@ unit_settings = {
 }
 ui_settings = {
     "CODE_SIGN_STYLE": "Automatic",
+    "DEVELOPMENT_TEAM": DEVELOPMENT_TEAM,
     "CURRENT_PROJECT_VERSION": "1",
     "GENERATE_INFOPLIST_FILE": "YES",
     "MARKETING_VERSION": "1.0",
