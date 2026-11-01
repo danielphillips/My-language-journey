@@ -262,3 +262,35 @@ Test Suite 'All tests' passed at 2026-11-01 19:22:26.074
 ✔ Suite "Vocabulary query" passed after 0.009 seconds.
 ✔ Test run with 84 tests in 16 suites passed after 0.010 seconds.
 ```
+
+### Slice 6 RED: pronunciation notes
+
+`swift test` → exit 1
+
+```
+   |                                                                                   `- error: reference to member 'french' cannot be resolved without a contextual type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:19:61: error: reference to member 'brazilianPortuguese' cannot be resolved without a contextual type
+   |                                                             `- error: reference to member 'brazilianPortuguese' cannot be resolved without a contextual type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:26:24: error: cannot find 'PronunciationNoteDraft' in scope
+   |                        `- error: cannot find 'PronunciationNoteDraft' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:28:35: error: cannot infer contextual base in reference to member 'brazilianPortuguese'
+   |                                   `- error: cannot infer contextual base in reference to member 'brazilianPortuguese'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:34:24: error: cannot find 'PronunciationNoteDraft' in scope
+   |                        `- error: cannot find 'PronunciationNoteDraft' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:37:26: error: cannot find 'PronunciationNoteDraft' in scope
+   |                          `- error: cannot find 'PronunciationNoteDraft' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:42:25: error: cannot find 'PronunciationNoteError' in scope
+   |                         `- error: cannot find 'PronunciationNoteError' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:43:17: error: cannot find 'PronunciationNoteDraft' in scope
+   |                 `- error: cannot find 'PronunciationNoteDraft' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:48:24: error: cannot find 'PronunciationNoteDraft' in scope
+   |                        `- error: cannot find 'PronunciationNoteDraft' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:50:29: error: cannot find 'PronunciationNoteDraft' in scope
+   |                             `- error: cannot find 'PronunciationNoteDraft' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:55:24: error: cannot find 'PronunciationNoteDraft' in scope
+   |                        `- error: cannot find 'PronunciationNoteDraft' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PronunciationTests.swift:56:26: error: cannot infer contextual base in reference to member 'english'
+   |                          `- error: cannot infer contextual base in reference to member 'english'
+error: Build failed
+error: fatalError
+```
