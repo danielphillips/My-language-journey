@@ -91,6 +91,39 @@ final class CriticalJourneyUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Take 1"].exists)
     }
 
+    func testDeletingARecording() {
+        var app = launch(reset: true)
+        completeOnboarding(app)
+
+        app.tabBars.buttons["Vocabulary"].tap()
+        app.buttons["vocabulary.add"].tap()
+        let russian = app.textFields["addWord.russian"]
+        XCTAssertTrue(russian.waitForExistence(timeout: 5))
+        russian.tap()
+        russian.typeText("хлеб")
+        let meaning = app.textFields["addWord.meaning"]
+        meaning.tap()
+        meaning.typeText("bread")
+        app.buttons["addWord.save"].tap()
+        app.staticTexts["хлеб"].firstMatch.tap()
+
+        let record = app.buttons["recordings.record"]
+        if !record.isHittable { app.swipeUp() }
+        record.tap()
+        app.buttons["recordings.stop"].tap()
+        XCTAssertTrue(app.staticTexts["Take 1"].waitForExistence(timeout: 5))
+
+        app.buttons["recording.actions.Take 1"].tap()
+        app.buttons["recording.delete"].tap()
+        XCTAssertTrue(app.staticTexts["Take 1"].waitForNonExistence(timeout: 5))
+
+        app.terminate()
+        app = launch(reset: false)
+        app.tabBars.buttons["Vocabulary"].tap()
+        app.staticTexts["хлеб"].firstMatch.tap()
+        XCTAssertFalse(app.staticTexts["Take 1"].waitForExistence(timeout: 2))
+    }
+
     private func addPronunciation(_ app: XCUIApplication, text: String, languageID: String) {
         app.buttons["detail.addPronunciation"].tap()
         let field = app.textFields["pronunciation.text"]
