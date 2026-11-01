@@ -175,3 +175,24 @@ Test Suite 'All tests' passed at 2026-11-01 19:19:25.982
 error: Build failed
 error: fatalError
 ```
+
+### Slice 4 GREEN: milestones
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 19:20:37.748
+Test Suite 'All tests' passed at 2026-11-01 19:20:37.748
+✔ Suite "Proficiency levels" passed after 0.006 seconds.
+✔ Suite "Study categories" passed after 0.006 seconds.
+✔ Suite "Milestone status" passed after 0.006 seconds.
+✔ Suite "Study statistics" passed after 0.006 seconds.
+✔ Suite "Study timer" passed after 0.006 seconds.
+✔ Suite "Milestone catalogue" passed after 0.006 seconds.
+✔ Suite "Exam date" passed after 0.006 seconds.
+✔ Suite "Study session validation" passed after 0.006 seconds.
+✔ Suite "Roadmap progress" passed after 0.006 seconds.
+✔ Suite "Goal settings" passed after 0.006 seconds.
+✔ Suite "Goal progress" passed after 0.006 seconds.
+✔ Test run with 61 tests in 11 suites passed after 0.007 seconds.
+```
