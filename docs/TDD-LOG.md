@@ -384,3 +384,11 @@ Test Suite 'All tests' passed at 2026-11-01 19:24:29.191
 ✔ Suite "Recording flow" passed after 0.018 seconds.
 ✔ Test run with 113 tests in 20 suites passed after 0.020 seconds.
 ```
+
+### Slice 8 RED (app layer): SwiftData integration, live timer persistence and UI journeys (**unverified**)
+
+`MyRussianTests/PersistenceTests.swift`, `MyRussianTests/LiveTimerStoreTests.swift` and
+`MyRussianUITests/CriticalJourneyUITests.swift` were written before any app code existed. They need
+Xcode 26 and an iOS simulator, which this Linux environment doesn't have, so the expected RED
+(missing `AppModelContainer`, `VocabularyService`, `StudyLog`, `GoalStore`, `MilestoneStore`,
+`LiveTimerStore` and the UI) **could not be executed or captured here**.
