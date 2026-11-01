@@ -621,3 +621,35 @@ Test Suite 'All tests' passed at 2026-11-01 23:16:28.831
 error: Build failed
 error: fatalError
 ```
+
+### GREEN: vocabulary topics, breakdown and filter
+
+`swift test` → exit 0
+
+```
+✔ Suite "Pronunciation notes" passed after 0.017 seconds.
+✔ Suite "Topic breakdown" passed after 0.017 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.017 seconds.
+✔ Suite "Study categories" passed after 0.017 seconds.
+✔ Suite "Study timer" passed after 0.017 seconds.
+✔ Suite "Exam date" passed after 0.017 seconds.
+✔ Suite "Vocabulary topics" passed after 0.017 seconds.
+✔ Suite "Duplicate detection" passed after 0.017 seconds.
+✔ Suite "Topic filter" passed after 0.017 seconds.
+✔ Suite "Vocabulary list subtitle" passed after 0.017 seconds.
+✔ Suite "Confidence levels" passed after 0.017 seconds.
+✔ Suite "Proficiency levels" passed after 0.017 seconds.
+✔ Suite "Confidence segment filter" passed after 0.017 seconds.
+✔ Suite "Roadmap progress" passed after 0.017 seconds.
+✔ Suite "Milestone status" passed after 0.017 seconds.
+✔ Suite "Goal progress" passed after 0.017 seconds.
+✔ Suite "Milestone catalogue" passed after 0.016 seconds.
+✔ Suite "Confidence distribution" passed after 0.017 seconds.
+✔ Suite "Audio file store" passed after 0.017 seconds.
+✔ Suite "Study statistics" passed after 0.017 seconds.
+✔ Suite "Russian text handling" passed after 0.017 seconds.
+✔ Suite "Goal settings" passed after 0.017 seconds.
+✔ Suite "Vocabulary query" passed after 0.017 seconds.
+✔ Suite "Recording flow" passed after 0.018 seconds.
+✔ Test run with 132 tests in 26 suites passed after 0.019 seconds.
+```

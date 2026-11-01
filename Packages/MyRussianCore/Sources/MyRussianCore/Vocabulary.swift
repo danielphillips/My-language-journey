@@ -41,6 +41,7 @@ public protocol VocabularyItem: Identifiable where ID: Hashable {
     var dateAdded: Date { get }
     var dateUpdated: Date { get }
     var pronunciationTexts: [String] { get }
+    var topic: VocabularyTopic? { get }
 }
 
 public struct VocabularySnapshot: VocabularyItem, Hashable, Sendable {
@@ -51,9 +52,11 @@ public struct VocabularySnapshot: VocabularyItem, Hashable, Sendable {
     public var dateAdded: Date
     public var dateUpdated: Date
     public var pronunciationTexts: [String]
+    public var topic: VocabularyTopic?
 
     public init(id: UUID = UUID(), russian: String, meaning: String, confidence: ConfidenceLevel,
-                dateAdded: Date, dateUpdated: Date, pronunciationTexts: [String] = []) {
+                dateAdded: Date, dateUpdated: Date, pronunciationTexts: [String] = [], topic: VocabularyTopic? = nil) {
+        self.topic = topic
         self.id = id
         self.russian = russian
         self.meaning = meaning
@@ -144,8 +147,12 @@ public struct VocabularyQuery: Equatable, Sendable {
     /// Empty means all levels.
     public var confidences: Set<ConfidenceLevel>
     public var sort: VocabularySort
+    /// `nil` means all topics.
+    public var topic: VocabularyTopic?
 
-    public init(searchText: String = "", confidences: Set<ConfidenceLevel> = [], sort: VocabularySort = .recentlyAdded) {
+    public init(searchText: String = "", confidences: Set<ConfidenceLevel> = [], sort: VocabularySort = .recentlyAdded,
+                topic: VocabularyTopic? = nil) {
+        self.topic = topic
         self.searchText = searchText
         self.confidences = confidences
         self.sort = sort
@@ -161,6 +168,7 @@ public struct VocabularyQuery: Equatable, Sendable {
         let needle = VocabularyText.searchKey(searchText)
         let filtered = items.filter { item in
             (confidences.isEmpty || confidences.contains(item.confidence))
+                && (topic == nil || item.topic == topic)
                 && (needle.isEmpty || ([item.russian, item.meaning] + item.pronunciationTexts)
                     .contains { VocabularyText.searchKey($0).contains(needle) })
         }
@@ -200,7 +208,7 @@ public struct VocabularyGrowthPoint: Equatable, Sendable, Identifiable {
 }
 
 public struct VocabularyStatistics<Item: VocabularyItem> {
-    private let items: [Item]
+    let items: [Item]
 
     public init(items: [Item]) {
         self.items = items
