@@ -24,15 +24,7 @@ struct RecordingsSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                CardHeader(title: "My recordings", systemImage: "waveform")
-                Button("Import", systemImage: "square.and.arrow.down") { importing = true }
-                    .labelStyle(.iconOnly)
-                    .buttonStyle(.glass)
-                    .disabled(flow.isRecording)
-                    .accessibilityLabel("Import audio file")
-                    .accessibilityIdentifier("recordings.import")
-            }
+            CardHeader(title: "My recordings", systemImage: "waveform")
 
             recorder
 
@@ -126,17 +118,33 @@ struct RecordingsSection: View {
             .padding()
             .glassEffect(.regular.tint(.red.opacity(0.12)), in: .rect(cornerRadius: 18))
         } else {
-            Button {
-                app.player.stop()
-                Task { await flow.start() }
-            } label: {
-                Label("Record “\(word.russian)”", systemImage: "mic.fill")
-                    .frame(maxWidth: .infinity)
+            GlassEffectContainer(spacing: 10) {
+                HStack(spacing: 10) {
+                    Button {
+                        app.player.stop()
+                        Task { await flow.start() }
+                    } label: {
+                        Label("Record “\(word.russian)”", systemImage: "mic.fill")
+                            .lineLimit(1)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.glassProminent)
+                    .disabled(flow.state == .requestingPermission)
+                    .accessibilityIdentifier("recordings.record")
+
+                    Button {
+                        importing = true
+                    } label: {
+                        Label("Import", systemImage: "square.and.arrow.down")
+                            .lineLimit(1)
+                    }
+                    .buttonStyle(.glass)
+                    .accessibilityLabel("Import audio file")
+                    .accessibilityHint("Choose a short audio clip from Files")
+                    .accessibilityIdentifier("recordings.import")
+                }
+                .controlSize(.large)
             }
-            .buttonStyle(.glassProminent)
-            .controlSize(.large)
-            .disabled(flow.state == .requestingPermission)
-            .accessibilityIdentifier("recordings.record")
         }
     }
 
