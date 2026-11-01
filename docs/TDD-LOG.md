@@ -93,3 +93,35 @@ Test Suite 'All tests' passed at 2026-11-01 19:18:06.001
 ✔ Suite "Goal progress" passed after 0.003 seconds.
 ✔ Test run with 27 tests in 6 suites passed after 0.004 seconds.
 ```
+
+### Slice 3 RED: study statistics & session validation
+
+`swift test` → exit 1
+
+```
+    |             `- error: cannot find 'StudySessionValidator' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:137:25: error: cannot find 'StudySessionValidationError' in scope
+    |                         `- error: cannot find 'StudySessionValidationError' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:138:17: error: cannot find 'StudySessionValidator' in scope
+    |                 `- error: cannot find 'StudySessionValidator' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:143:25: error: cannot find 'StudySessionValidationError' in scope
+    |                         `- error: cannot find 'StudySessionValidationError' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:144:17: error: cannot find 'StudySessionValidator' in scope
+    |                 `- error: cannot find 'StudySessionValidator' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:149:25: error: cannot find 'StudySessionValidationError' in scope
+    |                         `- error: cannot find 'StudySessionValidationError' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:150:17: error: cannot find 'StudySessionValidator' in scope
+    |                 `- error: cannot find 'StudySessionValidator' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:156:25: error: cannot find 'StudySessionValidationError' in scope
+    |                         `- error: cannot find 'StudySessionValidationError' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:157:17: error: cannot find 'StudySessionValidator' in scope
+    |                 `- error: cannot find 'StudySessionValidator' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:163:25: error: cannot find 'StudySessionValidationError' in scope
+    |                         `- error: cannot find 'StudySessionValidationError' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:164:17: error: cannot find 'StudySessionValidator' in scope
+    |                 `- error: cannot find 'StudySessionValidator' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyStatisticsTests.swift:170:13: error: cannot find 'StudySessionValidator' in scope
+    |             `- error: cannot find 'StudySessionValidator' in scope
+error: Build failed
+error: fatalError
+```
