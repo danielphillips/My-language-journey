@@ -29,3 +29,67 @@ Test Suite 'All tests' passed at 2026-11-01 19:17:10.049
 ✔ Suite "Goal settings" passed after 0.003 seconds.
 ✔ Test run with 15 tests in 4 suites passed after 0.004 seconds.
 ```
+
+### Slice 2 RED: study timer
+
+`swift test` → exit 1
+
+```
+    |                     `- error: cannot find 'StudyTimer' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:81:21: error: cannot find 'StudyTimer' in scope
+    |                     `- error: cannot find 'StudyTimer' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:84:33: error: cannot infer contextual base in reference to member 'idle'
+    |                                 `- error: cannot infer contextual base in reference to member 'idle'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:89:21: error: cannot find 'StudyTimer' in scope
+    |                     `- error: cannot find 'StudyTimer' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:96:49: error: cannot find 'StudyTimer' in scope
+    |                                                 `- error: cannot find 'StudyTimer' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:96:42: error: failed to produce diagnostic for expression; please submit a bug report (https://swift.org/contributing/#reporting-bugs)
+    |                                          `- error: failed to produce diagnostic for expression; please submit a bug report (https://swift.org/contributing/#reporting-bugs)
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:99:38: error: cannot infer contextual base in reference to member 'minutes'
+    |                                      `- error: cannot infer contextual base in reference to member 'minutes'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:100:38: error: cannot infer contextual base in reference to member 'reading'
+    |                                      `- error: cannot infer contextual base in reference to member 'reading'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:104:21: error: cannot find 'StudyTimer' in scope
+    |                     `- error: cannot find 'StudyTimer' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:112:21: error: cannot find 'StudyTimer' in scope
+    |                     `- error: cannot find 'StudyTimer' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:114:27: error: cannot infer contextual base in reference to member 'speaking'
+    |                           `- error: cannot infer contextual base in reference to member 'speaking'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:116:38: error: cannot infer contextual base in reference to member 'speaking'
+    |                                      `- error: cannot infer contextual base in reference to member 'speaking'
+error: Build failed
+error: fatalError
+```
+
+### Slice 2 GREEN: study timer
+
+`swift test` → exit 1
+
+```
+error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+macro expansion #require:2:6: error: cannot use mutating member on immutable value: '$0' is immutable
+    |  |      `- error: cannot use mutating member on immutable value: '$0' is immutable
+macro expansion #require:2:6: error: cannot use mutating member on immutable value: '$0' is immutable
+    |  |      `- error: cannot use mutating member on immutable value: '$0' is immutable
+macro expansion #require:2:6: error: cannot use mutating member on immutable value: '$0' is immutable
+    |  |      `- error: cannot use mutating member on immutable value: '$0' is immutable
+error: Build failed
+error: fatalError
+```
+
+### Slice 2 GREEN (after fixing mutating calls inside #require in test code)
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 19:18:06.001
+Test Suite 'All tests' passed at 2026-11-01 19:18:06.001
+✔ Suite "Proficiency levels" passed after 0.003 seconds.
+✔ Suite "Goal settings" passed after 0.003 seconds.
+✔ Suite "Exam date" passed after 0.002 seconds.
+✔ Suite "Study categories" passed after 0.002 seconds.
+✔ Suite "Study timer" passed after 0.003 seconds.
+✔ Suite "Goal progress" passed after 0.003 seconds.
+✔ Test run with 27 tests in 6 suites passed after 0.004 seconds.
+```
