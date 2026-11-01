@@ -38,9 +38,10 @@ struct RecordingsSection: View {
                     ForEach(recordings) { recording in
                         RecordingRow(recording: recording,
                                      isPlaying: app.player.playingID == recording.id,
-                                     isAvailable: service.isAvailable(recording)) {
-                            app.player.toggle(id: recording.id, url: service.url(for: recording))
-                        }
+                                     isAvailable: service.isAvailable(recording),
+                                     onPlay: { app.player.toggle(id: recording.id, url: service.url(for: recording)) },
+                                     onRename: { renaming = recording },
+                                     onDelete: { delete(recording) })
                         .contextMenu {
                             Button("Rename or Annotate", systemImage: "pencil") { renaming = recording }
                             Button("Delete", systemImage: "trash", role: .destructive) { delete(recording) }
@@ -196,6 +197,8 @@ private struct RecordingRow: View {
     let isPlaying: Bool
     let isAvailable: Bool
     let onPlay: () -> Void
+    let onRename: () -> Void
+    let onDelete: () -> Void
 
     var body: some View {
         HStack(spacing: 14) {
@@ -235,8 +238,22 @@ private struct RecordingRow: View {
             Text(DurationFormat.clock(recording.duration))
                 .font(.subheadline.monospacedDigit())
                 .foregroundStyle(.secondary)
+            Menu {
+                Button("Rename or Annotate", systemImage: "pencil", action: onRename)
+                Button("Delete", systemImage: "trash", role: .destructive, action: onDelete)
+                    .accessibilityIdentifier("recording.delete")
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(.body.weight(.semibold))
+                    .frame(width: 36, height: 44)
+                    .contentShape(.rect)
+            }
+            .foregroundStyle(.secondary)
+            .accessibilityLabel("Actions for \(recording.title)")
+            .accessibilityIdentifier("recording.actions.\(recording.title)")
         }
-        .padding(.horizontal)
+        .padding(.leading)
+        .padding(.trailing, 6)
         .padding(.vertical, 10)
     }
 }
