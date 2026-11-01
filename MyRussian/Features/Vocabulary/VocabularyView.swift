@@ -121,7 +121,8 @@ struct WordRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(word.russian)
                     .font(Theme.russian(.title3))
-                Text(word.meaning)
+                Text(verbatim: VocabularyText.listSubtitle(meaning: word.meaning,
+                                                          pronunciations: word.sortedPronunciationNotes.map(\.text)))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)

@@ -462,3 +462,34 @@ error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRuss
 error: Build failed
 error: fatalError
 ```
+
+### GREEN: vocabulary list subtitle
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 23:14:48.423
+Test Suite 'All tests' passed at 2026-11-01 23:14:48.423
+✔ Suite "Vocabulary statistics" passed after 0.023 seconds.
+✔ Suite "Vocabulary query" passed after 0.023 seconds.
+✔ Suite "Goal progress" passed after 0.023 seconds.
+✔ Suite "Milestone status" passed after 0.023 seconds.
+✔ Suite "Duplicate detection" passed after 0.023 seconds.
+✔ Suite "Exam date" passed after 0.022 seconds.
+✔ Suite "Reference languages" passed after 0.023 seconds.
+✔ Suite "Confidence levels" passed after 0.023 seconds.
+✔ Suite "Study timer" passed after 0.022 seconds.
+✔ Suite "Study categories" passed after 0.023 seconds.
+✔ Suite "Russian text handling" passed after 0.022 seconds.
+✔ Suite "Goal settings" passed after 0.023 seconds.
+✔ Suite "Pronunciation notes" passed after 0.023 seconds.
+✔ Suite "Proficiency levels" passed after 0.023 seconds.
+✔ Suite "Audio file store" passed after 0.023 seconds.
+✔ Suite "Milestone catalogue" passed after 0.023 seconds.
+✔ Suite "Roadmap progress" passed after 0.023 seconds.
+✔ Suite "Vocabulary list subtitle" passed after 0.023 seconds.
+✔ Suite "Study statistics" passed after 0.023 seconds.
+✔ Suite "Study session validation" passed after 0.023 seconds.
+✔ Suite "Recording flow" passed after 0.025 seconds.
+✔ Test run with 117 tests in 21 suites passed after 0.027 seconds.
+```

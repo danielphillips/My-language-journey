@@ -88,6 +88,12 @@ public enum VocabularyText {
         return collapseWhitespace(String(scalars))
     }
 
+    /// List-row subtitle: the meaning, then " • " and the first personal pronunciation (verbatim).
+    public static func listSubtitle(meaning: String, pronunciations: [String]) -> String {
+        guard let first = pronunciations.first(where: { !$0.allSatisfy(\.isWhitespace) }) else { return meaning }
+        return meaning + " • " + first
+    }
+
     private static func collapseWhitespace(_ text: String) -> String {
         text.split(whereSeparator: \.isWhitespace).joined(separator: " ")
     }
