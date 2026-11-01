@@ -166,6 +166,24 @@ struct VocabularyPersistenceTests {
         }
     }
 
+    @Test func topicIsSavedWithTheWordAndCanBeChanged() throws {
+        var env = try TestEnvironment()
+        let word = try env.vocabulary.addWord(russian: "хлеб", meaning: "bread", topic: .food)
+        #expect(word.topic == .food)
+        let untopiced = try env.vocabulary.addWord(russian: "где", meaning: "where")
+        #expect(untopiced.topic == nil)
+
+        env.now += 60
+        env.vocabulary.setTopic(.essentials, for: untopiced)
+        #expect(untopiced.topic == .essentials)
+        #expect(untopiced.dateUpdated == env.now)
+        env.vocabulary.setTopic(nil, for: word)
+        #expect(word.topic == nil)
+
+        let breakdown = VocabularyStatistics(items: env.vocabulary.allWords()).topicBreakdown
+        #expect(breakdown.map(\.topic) == [.essentials, nil])
+    }
+
     @Test func searchAndFilterWorkOnPersistedWords() throws {
         let env = try TestEnvironment()
         let где = try env.vocabulary.addWord(russian: "где", meaning: "where")
