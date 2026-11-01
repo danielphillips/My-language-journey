@@ -322,3 +322,35 @@ Test Suite 'All tests' passed at 2026-11-01 19:23:04.043
 ✔ Suite "Study session validation" passed after 0.009 seconds.
 ✔ Test run with 92 tests in 18 suites passed after 0.010 seconds.
 ```
+
+### Slice 7 RED: audio storage & recording flow
+
+`swift test` → exit 1
+
+```
+    |                                `- error: cannot infer contextual base in reference to member 'recording'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:180:30: error: cannot infer contextual base in reference to member 'undetermined'
+    |                              `- error: cannot infer contextual base in reference to member 'undetermined'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:184:32: error: cannot infer contextual base in reference to member 'permissionDenied'
+    |                                `- error: cannot infer contextual base in reference to member 'permissionDenied'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:189:28: error: cannot find 'MicrophonePermission' in scope
+    |                            `- error: cannot find 'MicrophonePermission' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:189:58: error: reference to member 'restricted' cannot be resolved without a contextual type
+    |                                                          `- error: reference to member 'restricted' cannot be resolved without a contextual type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:193:36: error: cannot infer contextual base in reference to member 'permissionDenied'
+    |                                    `- error: cannot infer contextual base in reference to member 'permissionDenied'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:203:55: error: generic parameter 'some StringProtocol' could not be inferred
+    |                                                       `- error: generic parameter 'some StringProtocol' could not be inferred
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:214:32: error: cannot infer contextual base in reference to member 'idle'
+    |                                `- error: cannot infer contextual base in reference to member 'idle'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:231:32: error: cannot infer contextual base in reference to member 'idle'
+    |                                `- error: cannot infer contextual base in reference to member 'idle'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:243:26: error: cannot find 'RecordingFlow' in scope
+    |                          `- error: cannot find 'RecordingFlow' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:244:35: error: cannot infer contextual base in reference to member 'imported'
+    |                                   `- error: cannot infer contextual base in reference to member 'imported'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AudioTests.swift:245:33: error: cannot infer contextual base in reference to member 'personal'
+    |                                 `- error: cannot infer contextual base in reference to member 'personal'
+error: Build failed
+error: fatalError
+```
