@@ -196,3 +196,17 @@ Test Suite 'All tests' passed at 2026-11-01 19:20:37.748
 ✔ Suite "Goal progress" passed after 0.006 seconds.
 ✔ Test run with 61 tests in 11 suites passed after 0.007 seconds.
 ```
+
+### Slice 5 RED: vocabulary
+
+`swift test` → exit 1
+
+```
+error: SwiftCompile normal x86_64 failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:8:6: error: cannot find type 'VocabularySnapshot' in scope
+    |      `- error: cannot find type 'VocabularySnapshot' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:6:57: error: cannot find type 'ConfidenceLevel' in scope
+    |                                                         `- error: cannot find type 'ConfidenceLevel' in scope
+error: Build failed
+error: fatalError
+```
