@@ -11,6 +11,7 @@ struct AddWordSheet: View {
     @State private var russian = ""
     @State private var meaning = ""
     @State private var confidence: ConfidenceLevel = .learning
+    @State private var topic: VocabularyTopic?
     @State private var pronunciation = ""
     @State private var language: ReferenceLanguage = .french
     @State private var errorMessage: String?
@@ -55,6 +56,17 @@ struct AddWordSheet: View {
 
                 Section("Confidence") {
                     ConfidencePicker(selection: $confidence)
+                }
+
+                Section {
+                    Picker("Topic", selection: $topic) {
+                        Text("None").tag(VocabularyTopic?.none)
+                        ForEach(VocabularyTopic.allCases) { item in
+                            Label(item.title, systemImage: item.systemImage).tag(Optional(item))
+                        }
+                    }
+                    .pickerStyle(.navigationLink)
+                    .accessibilityIdentifier("addWord.topic")
                 }
 
                 Section {
@@ -115,7 +127,7 @@ struct AddWordSheet: View {
             let note = pronunciation.allSatisfy(\.isWhitespace)
                 ? nil
                 : try PronunciationNoteDraft(text: pronunciation, language: language)
-            try service.addWord(russian: russian, meaning: meaning, confidence: confidence, pronunciation: note)
+            try service.addWord(russian: russian, meaning: meaning, confidence: confidence, pronunciation: note, topic: topic)
             saved += 1
             dismiss()
         } catch let error as VocabularyServiceError {
@@ -136,10 +148,12 @@ struct EditWordSheet: View {
     @State private var meaning: String
     @State private var example: String
     @State private var notes: String
+    @State private var topic: VocabularyTopic?
     @State private var errorMessage: String?
 
     init(word: VocabularyWord) {
         self.word = word
+        _topic = State(initialValue: word.topic)
         _russian = State(initialValue: word.russian)
         _meaning = State(initialValue: word.meaning)
         _example = State(initialValue: word.example)
@@ -155,6 +169,13 @@ struct EditWordSheet: View {
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                     TextField("English meaning", text: $meaning)
+                    Picker("Topic", selection: $topic) {
+                        Text("None").tag(VocabularyTopic?.none)
+                        ForEach(VocabularyTopic.allCases) { item in
+                            Label(item.title, systemImage: item.systemImage).tag(Optional(item))
+                        }
+                    }
+                    .pickerStyle(.navigationLink)
                 }
                 Section("Example sentence") {
                     TextField("Optional", text: $example, axis: .vertical)
@@ -180,8 +201,9 @@ struct EditWordSheet: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save", systemImage: "checkmark") {
                         do {
-                            try VocabularyService(context: context, audioStore: app.audioStore)
-                                .update(word, russian: russian, meaning: meaning, example: example, notes: notes)
+                            let service = VocabularyService(context: context, audioStore: app.audioStore)
+                            try service.update(word, russian: russian, meaning: meaning, example: example, notes: notes)
+                            service.setTopic(topic, for: word)
                             dismiss()
                         } catch let error as VocabularyServiceError {
                             errorMessage = error.message

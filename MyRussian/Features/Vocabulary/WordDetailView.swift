@@ -82,6 +82,22 @@ struct WordDetailView: View {
                 .font(.title3)
                 .foregroundStyle(.secondary)
                 .textSelection(.enabled)
+            Menu {
+                Picker("Topic", selection: Binding(get: { word.topic }, set: { service.setTopic($0, for: word) })) {
+                    Text("None").tag(VocabularyTopic?.none)
+                    ForEach(VocabularyTopic.allCases) { item in
+                        Label(item.title, systemImage: item.systemImage).tag(Optional(item))
+                    }
+                }
+            } label: {
+                Label(word.topic?.title ?? "Add topic", systemImage: word.topic?.systemImage ?? "tag")
+                    .font(.subheadline.weight(.medium))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.accentColor.opacity(0.12), in: .capsule)
+            }
+            .padding(.top, 4)
+            .accessibilityIdentifier("detail.topic")
             Text("Added \(word.dateAdded.formatted(date: .abbreviated, time: .omitted))")
                 .font(.caption)
                 .foregroundStyle(.tertiary)

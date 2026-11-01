@@ -113,6 +113,8 @@ final class VocabularyWord {
     var notes: String = ""
     var dateAdded: Date = Date.now
     var dateUpdated: Date = Date.now
+    /// Optional everyday topic (`VocabularyTopic` raw value). Added after V1; optional, so existing stores migrate automatically.
+    var topicRaw: String?
 
     @Relationship(deleteRule: .cascade, inverse: \PronunciationNote.word)
     var pronunciationNotes: [PronunciationNote]? = []
@@ -131,6 +133,11 @@ final class VocabularyWord {
     var confidence: ConfidenceLevel {
         get { ConfidenceLevel(rawValue: confidenceRaw) ?? .learning }
         set { confidenceRaw = newValue.rawValue }
+    }
+
+    var topic: VocabularyTopic? {
+        get { topicRaw.flatMap(VocabularyTopic.init(rawValue:)) }
+        set { topicRaw = newValue?.rawValue }
     }
 
     var sortedPronunciationNotes: [PronunciationNote] {

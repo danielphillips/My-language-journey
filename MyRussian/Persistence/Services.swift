@@ -111,11 +111,13 @@ struct VocabularyService {
     @discardableResult
     func addWord(russian: String, meaning: String, confidence: ConfidenceLevel = .learning,
                  example: String = "", notes: String = "",
-                 pronunciation: PronunciationNoteDraft? = nil) throws -> VocabularyWord {
+                 pronunciation: PronunciationNoteDraft? = nil,
+                 topic: VocabularyTopic? = nil) throws -> VocabularyWord {
         let (cleanRussian, cleanMeaning) = try validated(russian: russian, meaning: meaning, excluding: nil)
         let word = VocabularyWord(russian: cleanRussian, meaning: cleanMeaning, confidence: confidence, date: now())
         word.example = VocabularyText.cleanedForStorage(example)
         word.notes = VocabularyText.cleanedForStorage(notes)
+        word.topic = topic
         context.insert(word)
         if let pronunciation {
             addNote(pronunciation, to: word)
@@ -137,6 +139,13 @@ struct VocabularyService {
     func setConfidence(_ confidence: ConfidenceLevel, for word: VocabularyWord) {
         guard word.confidence != confidence else { return }
         word.confidence = confidence
+        word.dateUpdated = now()
+        try? context.save()
+    }
+
+    func setTopic(_ topic: VocabularyTopic?, for word: VocabularyWord) {
+        guard word.topic != topic else { return }
+        word.topic = topic
         word.dateUpdated = now()
         try? context.save()
     }

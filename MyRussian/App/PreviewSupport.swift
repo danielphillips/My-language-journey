@@ -23,11 +23,12 @@ enum PreviewSupport {
         let audio = try! AudioFileStore(directory: FileManager.default.temporaryDirectory.appendingPathComponent("PreviewAudio"))
         let service = VocabularyService(context: context, audioStore: audio)
         try? service.addWord(russian: "где", meaning: "where", confidence: .confident,
-                             pronunciation: try? PronunciationNoteDraft(text: "Kadé", language: .french))
+                             pronunciation: try? PronunciationNoteDraft(text: "Kadé", language: .french), topic: .essentials)
         try? service.addWord(russian: "женщины", meaning: "women", confidence: .recognise,
-                             pronunciation: try? PronunciationNoteDraft(text: "Gente-chima", language: .brazilianPortuguese))
-        try? service.addWord(russian: "спасибо", meaning: "thank you", confidence: .comfortable)
-        try? service.addWord(russian: "здравствуйте", meaning: "hello (formal)", confidence: .learning)
+                             pronunciation: try? PronunciationNoteDraft(text: "Gente-chima", language: .brazilianPortuguese), topic: .people)
+        try? service.addWord(russian: "спасибо", meaning: "thank you", confidence: .comfortable, topic: .greetings)
+        try? service.addWord(russian: "здравствуйте", meaning: "hello (formal)", confidence: .learning, topic: .greetings)
+        try? service.addWord(russian: "хлеб", meaning: "bread", confidence: .confident, topic: .food)
         MilestoneStore(context: context).setStatus(.demonstrated, for: MilestoneCatalog.milestones(for: .a1)[0])
         MilestoneStore(context: context).setStatus(.learning, for: MilestoneCatalog.milestones(for: .a1)[1])
         try? context.save()

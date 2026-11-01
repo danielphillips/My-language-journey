@@ -15,11 +15,12 @@ struct VocabularyView: View {
 
     private var service: VocabularyService { VocabularyService(context: context, audioStore: app.audioStore) }
 
-    private var isFiltering: Bool { !query.searchText.isEmpty || !query.confidences.isEmpty }
+    private var isFiltering: Bool { !query.searchText.isEmpty || !query.confidences.isEmpty || query.topic != nil }
     private var isSearching: Bool { !query.searchText.isEmpty }
 
     private var listTitle: String {
-        if let level = query.confidenceFilter { return level.title }
+        let parts = [query.topic?.title, query.confidenceFilter?.title].compactMap { $0 }
+        if !parts.isEmpty { return parts.joined(separator: " · ") }
         return isFiltering ? "Results" : query.sort.title
     }
 
@@ -32,8 +33,38 @@ struct VocabularyView: View {
                     }
                 }
 
+                if !isSearching && !words.isEmpty {
+                    Section {
+                        TopicChart(breakdown: VocabularyStatistics(items: words).topicBreakdown, selection: $query.topic)
+                    } header: {
+                        Text("Topics")
+                    } footer: {
+                        Text("Tap a topic to show only its words. Colours show how well you know them.")
+                    }
+                }
+
                 if !words.isEmpty {
                     Section {
+                        if let topic = query.topic {
+                            Button {
+                                withAnimation(.snappy) { query.topic = nil }
+                            } label: {
+                                HStack {
+                                    Label(topic.title, systemImage: topic.systemImage)
+                                    Spacer()
+                                    Image(systemName: "xmark.circle.fill").foregroundStyle(.secondary)
+                                }
+                                .font(.subheadline.weight(.semibold))
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 10)
+                                .background(Color.accentColor.opacity(0.12), in: .capsule)
+                            }
+                            .buttonStyle(.plain)
+                            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                            .listRowBackground(Color.clear)
+                            .accessibilityLabel("Showing \(topic.title). Clear topic filter")
+                            .accessibilityIdentifier("vocabulary.clearTopic")
+                        }
                         ConfidenceSegmentedControl(selection: $query.confidenceFilter,
                                                    counts: VocabularyStatistics(items: words).distribution)
                             .listRowInsets(EdgeInsets())
@@ -90,9 +121,9 @@ struct VocabularyView: View {
                     }
                 } else if isSearching && query.apply(to: words).isEmpty {
                     ContentUnavailableView.search(text: query.searchText)
-                } else if let level = query.confidenceFilter, query.apply(to: words).isEmpty {
-                    ContentUnavailableView("No \(level.title) words yet", systemImage: "line.3.horizontal.decrease",
-                                           description: Text(level.explanation))
+                } else if isFiltering && query.apply(to: words).isEmpty {
+                    ContentUnavailableView("No \(listTitle) words yet", systemImage: "line.3.horizontal.decrease",
+                                           description: Text(query.confidenceFilter?.explanation ?? "Add words with this topic and they’ll appear here."))
                 }
             }
             .sheet(isPresented: $addingWord) {
@@ -114,6 +145,62 @@ private struct SortMenu: View {
             Label("Sort", systemImage: "arrow.up.arrow.down")
         }
         .accessibilityIdentifier("vocabulary.sort")
+    }
+}
+
+/// Horizontal bars, one per topic: length is the word count, segments are confidence levels.
+private struct TopicChart: View {
+    let breakdown: [TopicBreakdown]
+    @Binding var selection: VocabularyTopic?
+
+    var body: some View {
+        let maxTotal = max(breakdown.map(\.total).max() ?? 1, 1)
+        VStack(spacing: 12) {
+            ForEach(breakdown) { item in
+                Button {
+                    guard let topic = item.topic else { return }
+                    withAnimation(.snappy) { selection = selection == topic ? nil : topic }
+                } label: {
+                    row(item, maxTotal: maxTotal)
+                }
+                .buttonStyle(.plain)
+                .disabled(item.topic == nil)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(item.title): \(item.total) words")
+                .accessibilityValue(item.counts.filter { $0.count > 0 }.map { "\($0.count) \($0.level.title)" }.joined(separator: ", "))
+                .accessibilityAddTraits(selection != nil && selection == item.topic ? .isSelected : [])
+                .accessibilityIdentifier("topic.\(item.id)")
+            }
+        }
+        .padding(.vertical, 6)
+        .sensoryFeedback(.selection, trigger: selection)
+    }
+
+    private func row(_ item: TopicBreakdown, maxTotal: Int) -> some View {
+        let isDimmed = selection != nil && selection != item.topic
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Label(item.title, systemImage: item.topic?.systemImage ?? "tag.slash")
+                    .font(.subheadline.weight(.medium))
+                Spacer()
+                Text("\(item.total)")
+                    .font(.subheadline.monospacedDigit().weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+            GeometryReader { proxy in
+                HStack(spacing: 2) {
+                    ForEach(item.counts.filter { $0.count > 0 }) { count in
+                        Rectangle()
+                            .fill(count.level.color.gradient)
+                            .frame(width: max(proxy.size.width * CGFloat(count.count) / CGFloat(maxTotal) - 2, 4))
+                    }
+                }
+                .clipShape(.capsule)
+            }
+            .frame(height: 10)
+        }
+        .opacity(isDimmed ? 0.4 : 1)
+        .contentShape(.rect)
     }
 }
 
