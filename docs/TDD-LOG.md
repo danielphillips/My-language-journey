@@ -143,3 +143,35 @@ Test Suite 'All tests' passed at 2026-11-01 19:19:25.982
 ✔ Suite "Study statistics" passed after 0.008 seconds.
 ✔ Test run with 47 tests in 8 suites passed after 0.009 seconds.
 ```
+
+### Slice 4 RED: milestones
+
+`swift test` → exit 1
+
+```
+    |                              `- error: reference to member 'learning' cannot be resolved without a contextual type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:78:24: error: cannot find 'RoadmapProgress' in scope
+    |                        `- error: cannot find 'RoadmapProgress' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:79:84: error: cannot infer contextual base in reference to member 'alphabet'
+    |                                                                                    `- error: cannot infer contextual base in reference to member 'alphabet'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:88:32: error: cannot find type 'MilestoneStatus' in scope
+    |                                `- error: cannot find type 'MilestoneStatus' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:90:25: error: cannot infer contextual base in reference to member 'learning'
+    |                         `- error: cannot infer contextual base in reference to member 'learning'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:91:17: error: cannot find 'RoadmapProgress' in scope
+    |                 `- error: cannot find 'RoadmapProgress' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:92:25: error: cannot infer contextual base in reference to member 'demonstrated'
+    |                         `- error: cannot infer contextual base in reference to member 'demonstrated'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:93:24: error: cannot find 'RoadmapProgress' in scope
+    |                        `- error: cannot find 'RoadmapProgress' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:99:24: error: cannot find 'RoadmapProgress' in scope
+    |                        `- error: cannot find 'RoadmapProgress' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:104:24: error: cannot find 'RoadmapProgress' in scope
+    |                        `- error: cannot find 'RoadmapProgress' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:109:26: error: cannot infer key path type from context; consider explicitly specifying a root type
+    |                          `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/MilestoneTests.swift:113:24: error: cannot find 'RoadmapProgress' in scope
+    |                        `- error: cannot find 'RoadmapProgress' in scope
+error: Build failed
+error: fatalError
+```
