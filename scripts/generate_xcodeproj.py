@@ -88,6 +88,7 @@ app_settings = {
     "ENABLE_PREVIEWS": "YES",
     "GENERATE_INFOPLIST_FILE": "YES",
     "INFOPLIST_KEY_CFBundleDisplayName": "My Russian",
+    "INFOPLIST_KEY_ITSAppUsesNonExemptEncryption": "NO",
     "INFOPLIST_KEY_LSApplicationCategoryType": "public.app-category.education",
     "INFOPLIST_KEY_NSMicrophoneUsageDescription":
         "My Russian records you saying Russian words so you can listen back to your pronunciation. Recordings stay on this device.",
