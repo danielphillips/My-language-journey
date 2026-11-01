@@ -13,3 +13,19 @@ error: SwiftCompile normal x86_64 failed with a nonzero exit code. Command line:
 error: Build failed
 error: fatalError
 ```
+
+### Slice 1 GREEN: goal settings, exam date, progress & pace
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 19:17:10.049
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.0 (0.0) seconds
+Test Suite 'All tests' passed at 2026-11-01 19:17:10.049
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.0 (0.0) seconds
+✔ Suite "Proficiency levels" passed after 0.003 seconds.
+✔ Suite "Exam date" passed after 0.003 seconds.
+✔ Suite "Goal progress" passed after 0.003 seconds.
+✔ Suite "Goal settings" passed after 0.003 seconds.
+✔ Test run with 15 tests in 4 suites passed after 0.004 seconds.
+```

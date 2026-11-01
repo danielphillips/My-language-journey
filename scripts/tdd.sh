@@ -9,8 +9,8 @@ export PATH="/opt/swift/usr/bin:$PATH"
 cd "$root/Packages/MyRussianCore"
 args=(test)
 [[ -n "$filter" ]] && args+=(--filter "$filter")
-out="$(swift "${args[@]}" 2>&1 | sed "s/\x1b\[[0-9;]*m//g")"; status=${PIPESTATUS[0]}
-summary="$(printf '%s\n' "$out" | grep -E "error:|✘|Test run with|Suite .* (passed|failed)|recorded an issue|Executed [0-9]+ tests" | grep -v "^\s*$" | tail -n 25)"
+out="$(swift "${args[@]}" 2>&1 | sed "s/\x1b\[[0-9;]*m//g")"; status=$?
+summary="$(printf '%s\n' "$out" | grep -E "error:|✘|Test run with|Suite .* (passed|failed)|recorded an issue" | grep -v "^\s*$" | tail -n 25)"
 {
   echo
   echo "### $label"
