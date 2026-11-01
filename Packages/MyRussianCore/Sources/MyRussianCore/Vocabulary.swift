@@ -151,6 +151,12 @@ public struct VocabularyQuery: Equatable, Sendable {
         self.sort = sort
     }
 
+    /// Single-level filter for a segmented control: `nil` means all levels.
+    public var confidenceFilter: ConfidenceLevel? {
+        get { confidences.count == 1 ? confidences.first : nil }
+        set { confidences = newValue.map { [$0] } ?? [] }
+    }
+
     public func apply<Item: VocabularyItem>(to items: [Item]) -> [Item] {
         let needle = VocabularyText.searchKey(searchText)
         let filtered = items.filter { item in
@@ -181,6 +187,12 @@ public struct VocabularyQuery: Equatable, Sendable {
     }
 }
 
+public struct ConfidenceCount: Equatable, Sendable, Identifiable {
+    public let level: ConfidenceLevel
+    public let count: Int
+    public var id: ConfidenceLevel { level }
+}
+
 public struct VocabularyGrowthPoint: Equatable, Sendable, Identifiable {
     public let weekStart: Date
     public let total: Int
@@ -198,6 +210,11 @@ public struct VocabularyStatistics<Item: VocabularyItem> {
 
     public func count(of level: ConfidenceLevel) -> Int {
         items.filter { $0.confidence == level }.count
+    }
+
+    /// Word count for every confidence level, Learning → Confident, including empty levels.
+    public var distribution: [ConfidenceCount] {
+        ConfidenceLevel.allCases.map { ConfidenceCount(level: $0, count: count(of: $0)) }
     }
 
     public var activeCount: Int {

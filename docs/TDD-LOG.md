@@ -525,3 +525,67 @@ Test Suite 'All tests' passed at 2026-11-01 23:14:48.423
 error: Build failed
 error: fatalError
 ```
+
+### GREEN: confidence segment filter & distribution
+
+`swift test` → exit 0
+
+```
+Test Suite 'All tests' passed at 2026-11-01 23:15:49.566
+✔ Suite "Milestone status" passed after 0.014 seconds.
+✔ Suite "Reference languages" passed after 0.014 seconds.
+✔ Suite "Proficiency levels" passed after 0.014 seconds.
+✔ Suite "Study categories" passed after 0.014 seconds.
+✔ Suite "Confidence levels" passed after 0.014 seconds.
+✔ Suite "Study statistics" passed after 0.014 seconds.
+✔ Suite "Pronunciation notes" passed after 0.014 seconds.
+✔ Suite "Goal settings" passed after 0.014 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.014 seconds.
+✔ Suite "Study timer" passed after 0.014 seconds.
+✔ Suite "Goal progress" passed after 0.014 seconds.
+✔ Suite "Audio file store" passed after 0.014 seconds.
+✔ Suite "Roadmap progress" passed after 0.014 seconds.
+✔ Suite "Vocabulary list subtitle" passed after 0.014 seconds.
+✔ Suite "Confidence distribution" passed after 0.014 seconds.
+✔ Suite "Confidence segment filter" passed after 0.014 seconds.
+✔ Suite "Milestone catalogue" passed after 0.014 seconds.
+✔ Suite "Duplicate detection" passed after 0.014 seconds.
+✔ Suite "Exam date" passed after 0.014 seconds.
+✔ Suite "Russian text handling" passed after 0.014 seconds.
+✔ Suite "Study session validation" passed after 0.014 seconds.
+✔ Suite "Vocabulary query" passed after 0.014 seconds.
+✔ Suite "Recording flow" passed after 0.019 seconds.
+✔ Test run with 121 tests in 23 suites passed after 0.020 seconds.
+```
+
+### Check after vocabulary UI change
+
+`swift test` → exit 0
+
+```
+Test Suite 'All tests' passed at 2026-11-01 23:16:28.831
+✔ Suite "Vocabulary list subtitle" passed after 0.015 seconds.
+✔ Suite "Exam date" passed after 0.015 seconds.
+✔ Suite "Milestone catalogue" passed after 0.015 seconds.
+✔ Suite "Proficiency levels" passed after 0.015 seconds.
+✔ Suite "Study statistics" passed after 0.015 seconds.
+✔ Suite "Reference languages" passed after 0.015 seconds.
+✔ Suite "Duplicate detection" passed after 0.015 seconds.
+✔ Suite "Study timer" passed after 0.016 seconds.
+✔ Suite "Vocabulary query" passed after 0.015 seconds.
+✔ Suite "Confidence distribution" passed after 0.016 seconds.
+✔ Suite "Pronunciation notes" passed after 0.016 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.016 seconds.
+✔ Suite "Confidence segment filter" passed after 0.016 seconds.
+✔ Suite "Confidence levels" passed after 0.016 seconds.
+✔ Suite "Audio file store" passed after 0.016 seconds.
+✔ Suite "Roadmap progress" passed after 0.016 seconds.
+✔ Suite "Study categories" passed after 0.016 seconds.
+✔ Suite "Study session validation" passed after 0.016 seconds.
+✔ Suite "Goal progress" passed after 0.016 seconds.
+✔ Suite "Russian text handling" passed after 0.016 seconds.
+✔ Suite "Milestone status" passed after 0.016 seconds.
+✔ Suite "Goal settings" passed after 0.016 seconds.
+✔ Suite "Recording flow" passed after 0.019 seconds.
+✔ Test run with 121 tests in 23 suites passed after 0.020 seconds.
+```

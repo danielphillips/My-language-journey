@@ -16,13 +16,28 @@ struct VocabularyView: View {
     private var service: VocabularyService { VocabularyService(context: context, audioStore: app.audioStore) }
 
     private var isFiltering: Bool { !query.searchText.isEmpty || !query.confidences.isEmpty }
+    private var isSearching: Bool { !query.searchText.isEmpty }
+
+    private var listTitle: String {
+        if let level = query.confidenceFilter { return level.title }
+        return isFiltering ? "Results" : query.sort.title
+    }
 
     var body: some View {
         NavigationStack(path: $path) {
             List {
-                if !isFiltering && !words.isEmpty {
+                if !isSearching && !words.isEmpty {
                     Section {
                         VocabularyOverview(words: words, level: goals.first?.settings.level ?? .a1)
+                    }
+                }
+
+                if !words.isEmpty {
+                    Section {
+                        ConfidenceSegmentedControl(selection: $query.confidenceFilter,
+                                                   counts: VocabularyStatistics(items: words).distribution)
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.clear)
                     }
                 }
 
@@ -45,7 +60,7 @@ struct VocabularyView: View {
                     }
                 } header: {
                     if !words.isEmpty {
-                        Text(isFiltering ? "\(results.count) of \(words.count)" : query.sort.title)
+                        Text(isFiltering ? "\(listTitle) · \(results.count) of \(words.count)" : listTitle)
                     }
                 }
             }
@@ -56,7 +71,7 @@ struct VocabularyView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    FilterMenu(query: $query)
+                    SortMenu(sort: $query.sort)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Add Word", systemImage: "plus") { addingWord = true }
@@ -73,8 +88,11 @@ struct VocabularyView: View {
                         Button("Add Your First Word") { addingWord = true }
                             .buttonStyle(.glassProminent)
                     }
-                } else if isFiltering && query.apply(to: words).isEmpty {
+                } else if isSearching && query.apply(to: words).isEmpty {
                     ContentUnavailableView.search(text: query.searchText)
+                } else if let level = query.confidenceFilter, query.apply(to: words).isEmpty {
+                    ContentUnavailableView("No \(level.title) words yet", systemImage: "line.3.horizontal.decrease",
+                                           description: Text(level.explanation))
                 }
             }
             .sheet(isPresented: $addingWord) {
@@ -84,32 +102,57 @@ struct VocabularyView: View {
     }
 }
 
-private struct FilterMenu: View {
-    @Binding var query: VocabularyQuery
+private struct SortMenu: View {
+    @Binding var sort: VocabularySort
 
     var body: some View {
         Menu {
-            Picker("Sort", selection: $query.sort) {
+            Picker("Sort", selection: $sort) {
                 ForEach(VocabularySort.allCases) { Text($0.title).tag($0) }
             }
-            Section("Show") {
-                ForEach(ConfidenceLevel.allCases) { level in
-                    Toggle(level.title, isOn: Binding(
-                        get: { query.confidences.contains(level) },
-                        set: { isOn in
-                            if isOn { query.confidences.insert(level) } else { query.confidences.remove(level) }
-                        }
-                    ))
-                }
-                if !query.confidences.isEmpty {
-                    Button("Show All", systemImage: "xmark.circle") { query.confidences = [] }
-                }
-            }
         } label: {
-            Label("Sort and Filter", systemImage: query.confidences.isEmpty
-                  ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill")
+            Label("Sort", systemImage: "arrow.up.arrow.down")
         }
-        .accessibilityIdentifier("vocabulary.filter")
+        .accessibilityIdentifier("vocabulary.sort")
+    }
+}
+
+/// "All" plus one segment per confidence level; selecting one filters the list.
+private struct ConfidenceSegmentedControl: View {
+    @Binding var selection: ConfidenceLevel?
+    let counts: [ConfidenceCount]
+
+    var body: some View {
+        HStack(spacing: 4) {
+            segment(title: "All", color: .accentColor, level: nil)
+            ForEach(counts) { item in
+                segment(title: item.level.title, color: item.level.color, level: item.level)
+            }
+        }
+        .padding(4)
+        .glassEffect(.regular, in: .capsule)
+        .sensoryFeedback(.selection, trigger: selection)
+    }
+
+    private func segment(title: String, color: Color, level: ConfidenceLevel?) -> some View {
+        let isSelected = selection == level
+        return Button {
+            withAnimation(.snappy) { selection = level }
+        } label: {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.65)
+                .frame(maxWidth: .infinity, minHeight: 34)
+                .padding(.horizontal, 2)
+                .foregroundStyle(isSelected ? Color.white : color)
+                .background(isSelected ? color : Color.clear, in: .capsule)
+                .contentShape(.capsule)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(level.map { "\($0.title), \(counts.first { $0.level == level }?.count ?? 0) words" } ?? "All words")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityIdentifier("segment.\(level?.title.lowercased() ?? "all")")
     }
 }
 
@@ -170,27 +213,35 @@ private struct VocabularyOverview: View {
                 }
             }
 
-            HStack(spacing: 8) {
-                ForEach(ConfidenceLevel.allCases) { level in
-                    VStack(spacing: 2) {
-                        Text("\(stats.count(of: level))")
-                            .font(.system(.title3, design: .rounded, weight: .semibold))
+            Chart(stats.distribution) { item in
+                BarMark(x: .value("Confidence", item.level.title), y: .value("Words", Double(item.count)))
+                    .foregroundStyle(item.level.color.gradient)
+                    .cornerRadius(6)
+                    .annotation(position: .top, spacing: 4) {
+                        Text("\(item.count)")
+                            .font(.system(.subheadline, design: .rounded, weight: .semibold))
                             .monospacedDigit()
-                        Text(level.title)
-                            .font(.caption2)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
+                            .foregroundStyle(item.level.color)
                     }
-                    .foregroundStyle(level.color)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(level.color.opacity(0.1), in: .rect(cornerRadius: 14))
-                    .accessibilityElement(children: .combine)
+            }
+            .chartXScale(domain: ConfidenceLevel.allCases.map(\.title))
+            .chartYAxis(.hidden)
+            .chartYScale(domain: 0...max(Double(stats.distribution.map(\.count).max() ?? 0) * 1.25, 1))
+            .chartXAxis {
+                AxisMarks { _ in
+                    AxisValueLabel().font(.caption)
                 }
             }
+            .frame(height: 150)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Words by confidence")
+            .accessibilityValue(stats.distribution.map { "\($0.level.title) \($0.count)" }.joined(separator: ", "))
 
             let growth = stats.weeklyGrowth(endingWith: .now, weeks: 12, calendar: .current)
             if stats.total > 1 {
+                Text("Growth · last 12 weeks")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
                 Chart(growth) { point in
                     AreaMark(x: .value("Week", point.weekStart, unit: .weekOfYear), y: .value("Words", point.total))
                         .foregroundStyle(Color.accentColor.opacity(0.15).gradient)
