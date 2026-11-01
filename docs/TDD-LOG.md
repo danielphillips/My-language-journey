@@ -294,3 +294,31 @@ Test Suite 'All tests' passed at 2026-11-01 19:22:26.074
 error: Build failed
 error: fatalError
 ```
+
+### Slice 6 GREEN: pronunciation notes
+
+`swift test` → exit 0
+
+```
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-01 19:23:04.043
+Test Suite 'All tests' passed at 2026-11-01 19:23:04.043
+✔ Suite "Roadmap progress" passed after 0.009 seconds.
+✔ Suite "Goal settings" passed after 0.009 seconds.
+✔ Suite "Duplicate detection" passed after 0.009 seconds.
+✔ Suite "Vocabulary query" passed after 0.009 seconds.
+✔ Suite "Study statistics" passed after 0.009 seconds.
+✔ Suite "Exam date" passed after 0.009 seconds.
+✔ Suite "Reference languages" passed after 0.009 seconds.
+✔ Suite "Study timer" passed after 0.009 seconds.
+✔ Suite "Milestone status" passed after 0.009 seconds.
+✔ Suite "Proficiency levels" passed after 0.009 seconds.
+✔ Suite "Goal progress" passed after 0.009 seconds.
+✔ Suite "Confidence levels" passed after 0.009 seconds.
+✔ Suite "Study categories" passed after 0.009 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.009 seconds.
+✔ Suite "Russian text handling" passed after 0.009 seconds.
+✔ Suite "Pronunciation notes" passed after 0.009 seconds.
+✔ Suite "Milestone catalogue" passed after 0.009 seconds.
+✔ Suite "Study session validation" passed after 0.009 seconds.
+✔ Test run with 92 tests in 18 suites passed after 0.010 seconds.
+```
