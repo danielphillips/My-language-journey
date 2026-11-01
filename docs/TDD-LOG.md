@@ -444,3 +444,21 @@ What could be verified here:
 
 **Still unverified:** `PersistenceTests` (SwiftData) and `CriticalJourneyUITests` (XCUITest) need
 Xcode 26 and an iOS 26 simulator. Run them with `⌘U` in Xcode.
+
+### RED: vocabulary list subtitle (meaning • pronunciation)
+
+`swift test` → exit 1
+
+```
+error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:172:32: error: type 'VocabularyText' has no member 'listSubtitle'
+    |                                `- error: type 'VocabularyText' has no member 'listSubtitle'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:176:32: error: type 'VocabularyText' has no member 'listSubtitle'
+    |                                `- error: type 'VocabularyText' has no member 'listSubtitle'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:181:39: error: type 'VocabularyText' has no member 'listSubtitle'
+    |                                       `- error: type 'VocabularyText' has no member 'listSubtitle'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:186:32: error: type 'VocabularyText' has no member 'listSubtitle'
+    |                                `- error: type 'VocabularyText' has no member 'listSubtitle'
+error: Build failed
+error: fatalError
+```

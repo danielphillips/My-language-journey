@@ -165,3 +165,24 @@ struct VocabularyStatisticsTests {
         #expect(ProficiencyLevel.b1.lexicalMinimumReference == nil)
     }
 }
+
+@Suite("Vocabulary list subtitle")
+struct VocabularyListSubtitleTests {
+    @Test func meaningFollowedByTheFirstPronunciationNote() {
+        #expect(VocabularyText.listSubtitle(meaning: "Where", pronunciations: ["kadé", "Gdyeh"]) == "Where • kadé")
+    }
+
+    @Test func noBulletWhenThereIsNoPronunciation() {
+        #expect(VocabularyText.listSubtitle(meaning: "Bread", pronunciations: []) == "Bread")
+    }
+
+    @Test func personalSpellingIsShownExactlyAsTyped() {
+        let decomposed = "Kade\u{0301}"
+        let subtitle = VocabularyText.listSubtitle(meaning: "Where", pronunciations: [decomposed])
+        #expect(Array(subtitle.unicodeScalars.suffix(5)) == Array(decomposed.unicodeScalars))
+    }
+
+    @Test func blankNotesAreSkipped() {
+        #expect(VocabularyText.listSubtitle(meaning: "Woman", pronunciations: ["  ", "Gente-china"]) == "Woman • Gente-china")
+    }
+}
