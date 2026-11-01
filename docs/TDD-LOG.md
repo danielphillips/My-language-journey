@@ -589,3 +589,35 @@ Test Suite 'All tests' passed at 2026-11-01 23:16:28.831
 ✔ Suite "Recording flow" passed after 0.019 seconds.
 ✔ Test run with 121 tests in 23 suites passed after 0.020 seconds.
 ```
+
+### RED: vocabulary topics, breakdown and filter
+
+`swift test` → exit 1
+
+```
+   |                                                                       `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:60:17: error: generic parameter 'Item' could not be inferred
+   |                 |- error: generic parameter 'Item' could not be inferred
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:60:52: error: value of type 'VocabularyStatistics<Item>' has no member 'topicBreakdown'
+   |                                                    `- error: value of type 'VocabularyStatistics<Item>' has no member 'topicBreakdown'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:60:71: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                                                                       `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:64:69: error: value of type 'VocabularyStatistics<VocabularySnapshot>' has no member 'topicBreakdown'
+   |                                                                     `- error: value of type 'VocabularyStatistics<VocabularySnapshot>' has no member 'topicBreakdown'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:74:15: error: value of type 'VocabularyQuery' has no member 'topic'
+   |               `- error: value of type 'VocabularyQuery' has no member 'topic'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:74:24: error: cannot infer contextual base in reference to member 'food'
+   |                        `- error: cannot infer contextual base in reference to member 'food'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:75:44: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                                            `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:85:15: error: value of type 'VocabularyQuery' has no member 'topic'
+   |               `- error: value of type 'VocabularyQuery' has no member 'topic'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:85:24: error: cannot infer contextual base in reference to member 'food'
+   |                        `- error: cannot infer contextual base in reference to member 'food'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:87:44: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                                            `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/TopicTests.swift:87:23: error: generic parameter 'Item' could not be inferred
+   |                       `- error: generic parameter 'Item' could not be inferred
+error: Build failed
+error: fatalError
+```
