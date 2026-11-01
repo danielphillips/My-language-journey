@@ -186,3 +186,44 @@ struct VocabularyListSubtitleTests {
         #expect(VocabularyText.listSubtitle(meaning: "Woman", pronunciations: ["  ", "Gente-china"]) == "Woman • Gente-china")
     }
 }
+
+@Suite("Confidence segment filter")
+struct ConfidenceSegmentFilterTests {
+    @Test func selectingALevelFiltersToThatLevelOnly() {
+        var query = VocabularyQuery()
+        query.confidenceFilter = .comfortable
+        #expect(query.confidences == [.comfortable])
+        #expect(query.confidenceFilter == .comfortable)
+    }
+
+    @Test func selectingAllClearsTheFilter() {
+        var query = VocabularyQuery(confidences: [.learning])
+        query.confidenceFilter = nil
+        #expect(query.confidences.isEmpty)
+        #expect(query.confidenceFilter == nil)
+    }
+
+    @Test func selectedSegmentFiltersTheList() {
+        let words = [
+            VocabularySnapshot(russian: "где", meaning: "where", confidence: .confident, dateAdded: date(2026, 11, 1), dateUpdated: date(2026, 11, 1)),
+            VocabularySnapshot(russian: "хлеб", meaning: "bread", confidence: .learning, dateAdded: date(2026, 11, 2), dateUpdated: date(2026, 11, 2))
+        ]
+        var query = VocabularyQuery()
+        query.confidenceFilter = .learning
+        #expect(query.apply(to: words).map(\.russian) == ["хлеб"])
+    }
+}
+
+@Suite("Confidence distribution")
+struct ConfidenceDistributionTests {
+    @Test func everyLevelInOrderIncludingEmptyOnes() {
+        let words = [
+            VocabularySnapshot(russian: "где", meaning: "where", confidence: .confident, dateAdded: .now, dateUpdated: .now),
+            VocabularySnapshot(russian: "хлеб", meaning: "bread", confidence: .confident, dateAdded: .now, dateUpdated: .now),
+            VocabularySnapshot(russian: "кто", meaning: "who", confidence: .learning, dateAdded: .now, dateUpdated: .now)
+        ]
+        let distribution = VocabularyStatistics(items: words).distribution
+        #expect(distribution.map(\.level) == [.learning, .recognise, .comfortable, .confident])
+        #expect(distribution.map(\.count) == [1, 0, 0, 2])
+    }
+}

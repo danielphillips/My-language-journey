@@ -493,3 +493,35 @@ Test Suite 'All tests' passed at 2026-11-01 23:14:48.423
 ✔ Suite "Recording flow" passed after 0.025 seconds.
 ✔ Test run with 117 tests in 21 suites passed after 0.027 seconds.
 ```
+
+### RED: confidence segment filter & distribution
+
+`swift test` → exit 1
+
+```
+    |                       `- error: value of type 'VocabularyQuery' has no member 'confidenceFilter'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:201:15: error: value of type 'VocabularyQuery' has no member 'confidenceFilter'
+    |               `- error: value of type 'VocabularyQuery' has no member 'confidenceFilter'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:203:23: error: value of type 'VocabularyQuery' has no member 'confidenceFilter'
+    |                       `- error: value of type 'VocabularyQuery' has no member 'confidenceFilter'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:212:15: error: value of type 'VocabularyQuery' has no member 'confidenceFilter'
+    |               `- error: value of type 'VocabularyQuery' has no member 'confidenceFilter'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:212:35: error: cannot infer contextual base in reference to member 'learning'
+    |                                   `- error: cannot infer contextual base in reference to member 'learning'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:225:63: error: value of type 'VocabularyStatistics<VocabularySnapshot>' has no member 'distribution'
+    |                                                               `- error: value of type 'VocabularyStatistics<VocabularySnapshot>' has no member 'distribution'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:226:34: error: cannot infer key path type from context; consider explicitly specifying a root type
+    |                                  `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:226:48: error: reference to member 'learning' cannot be resolved without a contextual type
+    |                                                `- error: reference to member 'learning' cannot be resolved without a contextual type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:226:59: error: reference to member 'recognise' cannot be resolved without a contextual type
+    |                                                           `- error: reference to member 'recognise' cannot be resolved without a contextual type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:226:71: error: reference to member 'comfortable' cannot be resolved without a contextual type
+    |                                                                       `- error: reference to member 'comfortable' cannot be resolved without a contextual type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:226:85: error: reference to member 'confident' cannot be resolved without a contextual type
+    |                                                                                     `- error: reference to member 'confident' cannot be resolved without a contextual type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/VocabularyTests.swift:227:34: error: cannot infer key path type from context; consider explicitly specifying a root type
+    |                                  `- error: cannot infer key path type from context; consider explicitly specifying a root type
+error: Build failed
+error: fatalError
+```
