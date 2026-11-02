@@ -1,13 +1,14 @@
 import Foundation
 
 public enum StudyCategory: String, CaseIterable, Codable, Sendable, Identifiable {
-    case duolingo, vocabulary, grammar, listening, speaking, reading, writing, tutoring, other
+    case duolingo, busuu, vocabulary, grammar, listening, speaking, reading, writing, tutoring, other
 
     public var id: String { rawValue }
 
     public var title: String {
         switch self {
         case .duolingo: "Duolingo"
+        case .busuu: "Busuu"
         case .vocabulary: "Vocabulary"
         case .grammar: "Grammar"
         case .listening: "Listening"
@@ -23,6 +24,7 @@ public enum StudyCategory: String, CaseIterable, Codable, Sendable, Identifiable
     public var systemImage: String {
         switch self {
         case .duolingo: "bird"
+        case .busuu: "bubble.left.and.bubble.right"
         case .vocabulary: "character.book.closed"
         case .grammar: "textformat.abc"
         case .listening: "headphones"

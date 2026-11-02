@@ -697,3 +697,35 @@ error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRuss
 error: Build failed
 error: fatalError
 ```
+
+### GREEN: Busuu study category
+
+`swift test` → exit 0
+
+```
+✔ Suite "Vocabulary statistics" passed after 0.025 seconds.
+✔ Suite "Confidence segment filter" passed after 0.025 seconds.
+✔ Suite "Russian text handling" passed after 0.025 seconds.
+✔ Suite "Study timer" passed after 0.025 seconds.
+✔ Suite "Proficiency levels" passed after 0.025 seconds.
+✔ Suite "Topic breakdown" passed after 0.025 seconds.
+✔ Suite "Study session validation" passed after 0.025 seconds.
+✔ Suite "Study categories" passed after 0.025 seconds.
+✔ Suite "Duplicate detection" passed after 0.025 seconds.
+✔ Suite "Topic filter" passed after 0.025 seconds.
+✔ Suite "Roadmap progress" passed after 0.025 seconds.
+✔ Suite "Vocabulary topics" passed after 0.025 seconds.
+✔ Suite "Confidence levels" passed after 0.025 seconds.
+✔ Suite "Vocabulary query" passed after 0.025 seconds.
+✔ Suite "Confidence distribution" passed after 0.025 seconds.
+✔ Suite "Milestone catalogue" passed after 0.025 seconds.
+✔ Suite "Goal progress" passed after 0.025 seconds.
+✔ Suite "Goal settings" passed after 0.025 seconds.
+✔ Suite "Audio file store" passed after 0.025 seconds.
+✔ Suite "Milestone status" passed after 0.025 seconds.
+✔ Suite "Reference languages" passed after 0.025 seconds.
+✔ Suite "Pronunciation notes" passed after 0.025 seconds.
+✔ Suite "Study statistics" passed after 0.025 seconds.
+✔ Suite "Recording flow" passed after 0.027 seconds.
+✔ Test run with 133 tests in 27 suites passed after 0.029 seconds.
+```
