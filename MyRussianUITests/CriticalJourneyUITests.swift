@@ -124,6 +124,28 @@ final class CriticalJourneyUITests: XCTestCase {
         XCTAssertFalse(app.staticTexts["Take 1"].waitForExistence(timeout: 2))
     }
 
+    func testTappingOutsideATextFieldDismissesTheKeyboard() {
+        let app = launch(reset: true)
+        completeOnboarding(app)
+
+        app.tabBars.buttons["Vocabulary"].tap()
+        app.buttons["vocabulary.add"].tap()
+        let russian = app.textFields["addWord.russian"]
+        XCTAssertTrue(russian.waitForExistence(timeout: 5))
+        russian.tap()
+        russian.typeText("кот")
+        XCTAssertTrue(app.keyboards.element.waitForExistence(timeout: 3))
+
+        // Tap empty space (the sheet's title area), not a control.
+        app.navigationBars["New Word"].staticTexts["New Word"].tap()
+        XCTAssertTrue(app.keyboards.element.waitForNonExistence(timeout: 3))
+        XCTAssertEqual(russian.value as? String, "кот", "Dismissing the keyboard keeps what was typed")
+
+        // Tapping straight into another field still works.
+        app.textFields["addWord.meaning"].tap()
+        XCTAssertTrue(app.keyboards.element.waitForExistence(timeout: 3))
+    }
+
     private func addPronunciation(_ app: XCUIApplication, text: String, languageID: String) {
         app.buttons["detail.addPronunciation"].tap()
         let field = app.textFields["pronunciation.text"]
