@@ -729,3 +729,35 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.027 seconds.
 ✔ Test run with 133 tests in 27 suites passed after 0.029 seconds.
 ```
+
+### RED: photo compression sizing
+
+`swift test` → exit 1
+
+```
+   |                                                                                           `- error: cannot find 'PixelSize' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:20:17: error: cannot find 'PhotoCompression' in scope
+   |                 `- error: cannot find 'PhotoCompression' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:20:50: error: cannot find 'PixelSize' in scope
+   |                                                  `- error: cannot find 'PixelSize' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:20:89: error: cannot find 'PixelSize' in scope
+   |                                                                                         `- error: cannot find 'PixelSize' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:24:17: error: cannot find 'PhotoCompression' in scope
+   |                 `- error: cannot find 'PhotoCompression' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:24:50: error: cannot find 'PixelSize' in scope
+   |                                                  `- error: cannot find 'PixelSize' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:24:88: error: cannot find 'PixelSize' in scope
+   |                                                                                        `- error: cannot find 'PixelSize' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:25:17: error: cannot find 'PhotoCompression' in scope
+   |                 `- error: cannot find 'PhotoCompression' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:25:50: error: cannot find 'PixelSize' in scope
+   |                                                  `- error: cannot find 'PixelSize' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:25:90: error: cannot find 'PixelSize' in scope
+   |                                                                                          `- error: cannot find 'PixelSize' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:29:17: error: cannot find 'PhotoCompression' in scope
+   |                 `- error: cannot find 'PhotoCompression' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/PhotoTests.swift:29:50: error: cannot find 'PixelSize' in scope
+   |                                                  `- error: cannot find 'PixelSize' in scope
+error: Build failed
+error: fatalError
+```
