@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import UIKit
 import Testing
 import MyRussianCore
 @testable import MyRussian
@@ -284,6 +285,49 @@ struct RecordingPersistenceTests {
         let recording = env.vocabulary.addRecording(try savedTake(env), to: word)
         try FileManager.default.removeItem(at: env.audioStore.url(for: recording.relativePath))
         #expect(!env.vocabulary.isAvailable(recording))
+    }
+}
+
+@MainActor
+@Suite("Word photos")
+struct WordPhotoTests {
+    @Test func attachingReplacingAndRemovingAPhoto() throws {
+        var env = try TestEnvironment()
+        let word = try env.vocabulary.addWord(russian: "кот", meaning: "cat", topic: .animals)
+        #expect(word.photoData == nil)
+
+        env.now += 60
+        env.vocabulary.setPhoto(Data([1, 2, 3]), for: word)
+        #expect(word.photoData == Data([1, 2, 3]))
+        #expect(word.dateUpdated == env.now)
+
+        env.vocabulary.setPhoto(Data([4, 5]), for: word)
+        #expect(word.photoData == Data([4, 5]))
+
+        env.vocabulary.setPhoto(nil, for: word)
+        #expect(word.photoData == nil)
+    }
+
+    @Test func compressedPhotoIsSmallAndBounded() throws {
+        let big = PhotoEncoder.render(color: .orange, size: CGSize(width: 4032, height: 3024))
+        let jpeg = try #require(PhotoEncoder.compressedJPEG(from: big))
+        let decoded = try #require(UIImage(data: jpeg))
+        #expect(max(decoded.size.width * decoded.scale, decoded.size.height * decoded.scale) <= 512)
+        #expect(jpeg.count < 100_000)
+    }
+
+    @Test func photoSurvivesReopeningTheStore() throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("Photo-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let storeURL = folder.appendingPathComponent("MyRussian.store")
+        do {
+            let env = try TestEnvironment(inMemory: false, storeURL: storeURL, audioDirectory: folder.appendingPathComponent("A"))
+            let word = try env.vocabulary.addWord(russian: "кот", meaning: "cat")
+            env.vocabulary.setPhoto(Data(repeating: 9, count: 2048), for: word)
+            try env.context.save()
+        }
+        let reopened = try TestEnvironment(inMemory: false, storeURL: storeURL, audioDirectory: folder.appendingPathComponent("A"))
+        #expect(reopened.vocabulary.allWords().first?.photoData == Data(repeating: 9, count: 2048))
     }
 }
 
