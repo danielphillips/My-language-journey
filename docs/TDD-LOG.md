@@ -685,3 +685,15 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.018 seconds.
 ✔ Test run with 132 tests in 26 suites passed after 0.019 seconds.
 ```
+
+### RED: Busuu study category
+
+`swift test` → exit 1
+
+```
+error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/StudyTimerTests.swift:130:54: error: type 'StudyCategory?' has no member 'busuu'
+    |                                                      `- error: type 'StudyCategory?' has no member 'busuu'
+error: Build failed
+error: fatalError
+```

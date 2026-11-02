@@ -6,7 +6,7 @@ import Testing
 struct StudyCategoryTests {
     @Test func suggestedCategoriesInDisplayOrder() {
         #expect(StudyCategory.allCases.map(\.title) == [
-            "Duolingo", "Vocabulary", "Grammar", "Listening", "Speaking", "Reading", "Writing", "Tutoring", "Other"
+            "Duolingo", "Busuu", "Vocabulary", "Grammar", "Listening", "Speaking", "Reading", "Writing", "Tutoring", "Other"
         ])
     }
 
@@ -120,5 +120,14 @@ struct StudyTimerTests {
         let stopped = timer.stop(at: t0 + .minutes(5))
         let session = try #require(stopped)
         #expect(session.category == .speaking)
+    }
+}
+
+@Suite("Study category persistence")
+struct StudyCategoryPersistenceTests {
+    @Test func existingRawValuesAreUnchangedWhenCategoriesAreAdded() {
+        #expect(StudyCategory(rawValue: "duolingo") == .duolingo)
+        #expect(StudyCategory(rawValue: "busuu") == .busuu)
+        #expect(StudyCategory(rawValue: "other") == .other)
     }
 }
