@@ -18,6 +18,7 @@ struct RootView: View {
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
+        .dismissesKeyboardOnTapOutside()
         .fullScreenCover(isPresented: .constant(needsOnboarding)) {
             OnboardingView()
         }
