@@ -150,6 +150,13 @@ struct VocabularyService {
         try? context.save()
     }
 
+    /// Sets or removes the word's photo. Pass already-compressed JPEG data (see `PhotoEncoder`).
+    func setPhoto(_ jpeg: Data?, for word: VocabularyWord) {
+        word.photoData = jpeg
+        word.dateUpdated = now()
+        try? context.save()
+    }
+
     func delete(_ word: VocabularyWord) {
         for recording in word.recordings ?? [] {
             try? audioStore.delete(recording.relativePath)

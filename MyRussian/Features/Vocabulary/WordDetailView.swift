@@ -31,6 +31,7 @@ struct WordDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 28) {
                 header
+                WordPhotoBox(word: word)
                 confidence
                 pronunciation
                 RecordingsSection(word: word)

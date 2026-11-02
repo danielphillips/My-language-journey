@@ -115,6 +115,8 @@ final class VocabularyWord {
     var dateUpdated: Date = Date.now
     /// Optional everyday topic (`VocabularyTopic` raw value). Added after V1; optional, so existing stores migrate automatically.
     var topicRaw: String?
+    /// Small JPEG memory aid (≤ 512 px, heavily compressed). Stored outside the main database file.
+    @Attribute(.externalStorage) var photoData: Data?
 
     @Relationship(deleteRule: .cascade, inverse: \PronunciationNote.word)
     var pronunciationNotes: [PronunciationNote]? = []
