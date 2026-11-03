@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 import MyRussianCore
 
@@ -6,6 +7,8 @@ struct AlphabetView: View {
     @State private var speaker = RussianSpeaker()
     @State private var selected: RussianLetter = RussianAlphabet.letters[0]
     @State private var taps = 0
+    @State private var tray = WordTray()
+    @Query private var words: [VocabularyWord]
 
     /// 33 letters in rows of four. A plain (non-lazy) grid: small, and every tile exists for accessibility.
     private let rows: [[RussianLetter]] = stride(from: 0, to: RussianAlphabet.letters.count, by: 4).map {
@@ -26,10 +29,12 @@ struct AlphabetView: View {
                             ForEach(rows, id: \.first!.id) { row in
                                 GridRow {
                                     ForEach(row) { letter in
-                                        LetterTile(letter: letter, isSelected: letter == selected) {
+                                        LetterTile(letter: letter, isSelected: letter == selected, onTap: {
                                             withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) { selected = letter }
                                             speak(letter)
-                                        }
+                                        }, onLongPress: {
+                                            withAnimation(.spring(response: 0.4, dampingFraction: 0.65)) { tray.append(letter) }
+                                        })
                                     }
                                     // Keep the last row's tiles the same width as the others.
                                     ForEach(row.count..<4, id: \.self) { _ in Color.clear.gridCellUnsizedAxes([.horizontal, .vertical]) }
@@ -39,16 +44,40 @@ struct AlphabetView: View {
                     }
 
                     Legend()
+
+                    Label("Tap to hear a letter · Long-press to spell a word", systemImage: "hand.tap")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 32)
             }
             .background(Backdrop(letter: selected))
+            .safeAreaInset(edge: .bottom) {
+                if !tray.isEmpty {
+                    WordTrayBar(tray: tray, verdict: verdict, isSpeaking: speaker.speakingText == tray.text,
+                                onPlay: { speaker.speak(tray.text) },
+                                onBackspace: { withAnimation(.snappy) { tray.removeLast() } },
+                                onClear: { withAnimation(.smooth) { tray.clear() } },
+                                onRemove: { id in withAnimation(.snappy) { tray.remove(id) } })
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.spring(response: 0.45, dampingFraction: 0.8), value: tray.isEmpty)
+            .sensoryFeedback(.impact(weight: .medium), trigger: tray.items.count) { old, new in new > old }
+            .sensoryFeedback(.success, trigger: verdict.isCorrect) { old, new in new && !old }
             .navigationTitle("Alphabet")
             .toolbarTitleDisplayMode(.inlineLarge)
             .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.8), trigger: taps)
             .onDisappear { speaker.stop() }
         }
+    }
+
+    private var verdict: WordVerdict {
+        WordChecker.verdict(for: tray.text,
+                            vocabulary: words.map { KnownWord(russian: $0.russian, meaning: $0.meaning) },
+                            isDictionaryWord: RussianDictionary.contains)
     }
 
     private func speak(_ letter: RussianLetter) {
@@ -152,9 +181,11 @@ private struct AlphabetHero: View {
 private struct LetterTile: View {
     let letter: RussianLetter
     let isSelected: Bool
-    let action: () -> Void
+    let onTap: () -> Void
+    let onLongPress: () -> Void
 
     @State private var pulse = 0
+    @State private var lift = 0
 
     private var tint: Color {
         switch letter.kind {
@@ -165,11 +196,7 @@ private struct LetterTile: View {
     }
 
     var body: some View {
-        Button {
-            pulse += 1
-            action()
-        } label: {
-            VStack(spacing: 0) {
+        VStack(spacing: 0) {
                 Text(letter.uppercase)
                     .font(.system(size: 34, weight: .semibold, design: .serif))
                 Text(letter.lowercase)
@@ -179,8 +206,17 @@ private struct LetterTile: View {
             .foregroundStyle(letter.kind == .sign ? .secondary : .primary)
             .frame(maxWidth: .infinity, minHeight: 82)
             .contentShape(.rect(cornerRadius: 20))
-        }
-        .buttonStyle(.plain)
+        .gesture(
+            LongPressGesture(minimumDuration: 0.35)
+                .onEnded { _ in
+                    lift += 1
+                    onLongPress()
+                }
+                .exclusively(before: TapGesture().onEnded {
+                    pulse += 1
+                    onTap()
+                })
+        )
         .glassEffect(.regular.tint(tint).interactive(), in: .rect(cornerRadius: 20))
         .overlay {
             RoundedRectangle(cornerRadius: 20)
@@ -205,9 +241,21 @@ private struct LetterTile: View {
                 .allowsHitTesting(false)
         }
         .scaleEffect(isSelected ? 1.04 : 1)
+        .keyframeAnimator(initialValue: CGFloat(1), trigger: lift) { content, scale in
+            content.scaleEffect(scale)
+        } keyframes: { _ in
+            KeyframeTrack {
+                SpringKeyframe(1.18, duration: 0.14)
+                SpringKeyframe(1.0, duration: 0.35)
+            }
+        }
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
         .accessibilityLabel("\(letter.uppercase), \(letter.spokenName)")
-        .accessibilityHint(letter.kind.title)
+        .accessibilityHint("\(letter.kind.title). Double-tap to hear it.")
+        .accessibilityAction { onTap() }
+        .accessibilityAction(named: "Add to word") { onLongPress() }
         .accessibilityAddTraits(isSelected ? .isSelected : [])
         .accessibilityIdentifier("letter.\(letter.lowercase)")
     }
@@ -264,4 +312,112 @@ private struct Backdrop: View {
 
 #Preview {
     AlphabetView()
+}
+
+// MARK: - Word tray
+
+/// Floating glass tray for spelling a word from long-pressed letters.
+private struct WordTrayBar: View {
+    let tray: WordTray
+    let verdict: WordVerdict
+    let isSpeaking: Bool
+    let onPlay: () -> Void
+    let onBackspace: () -> Void
+    let onClear: () -> Void
+    let onRemove: (UUID) -> Void
+
+    private var status: (text: String, meaning: String?) {
+        switch verdict {
+        case let .inYourVocabulary(meaning): ("In your vocabulary", meaning)
+        case let .exampleWord(meaning): ("Russian word", meaning)
+        case .dictionaryWord: ("Russian word", nil)
+        case .empty, .unrecognised: ("Long-press letters to keep spelling", nil)
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                if verdict.isCorrect {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.title3)
+                        .foregroundStyle(.green)
+                        .symbolEffect(.bounce, value: tray.text)
+                        .transition(.scale.combined(with: .opacity))
+                        .accessibilityLabel("Correct word")
+                        .accessibilityIdentifier("tray.correct")
+                }
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(status.text)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(verdict.isCorrect ? .green : .secondary)
+                    if let meaning = status.meaning {
+                        Text(meaning).font(.subheadline)
+                    }
+                }
+                Spacer()
+                Button("Clear", systemImage: "xmark", action: onClear)
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(.glass)
+                    .buttonBorderShape(.circle)
+                    .accessibilityLabel("Clear word")
+                    .accessibilityIdentifier("tray.clear")
+            }
+            .animation(.spring(response: 0.35, dampingFraction: 0.7), value: verdict.isCorrect)
+
+            HStack(spacing: 10) {
+                ScrollView(.horizontal) {
+                    HStack(spacing: 4) {
+                        ForEach(tray.items) { item in
+                            Text(item.letter.lowercase)
+                                .font(.system(size: 30, weight: .semibold, design: .serif))
+                                .frame(minWidth: 34, minHeight: 50)
+                                .padding(.horizontal, 2)
+                                .background((verdict.isCorrect ? Color.green : Color.accentColor).opacity(0.14),
+                                            in: .rect(cornerRadius: 12))
+                                .onTapGesture { onRemove(item.id) }
+                                .transition(.asymmetric(
+                                    insertion: .scale(scale: 0.2).combined(with: .opacity).combined(with: .offset(y: -36)),
+                                    removal: .scale(scale: 0.4).combined(with: .opacity)))
+                        }
+                    }
+                    .padding(.vertical, 2)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityAddTraits(.isStaticText)
+                    .accessibilityLabel(tray.text)
+                    .accessibilityHint("Tap a letter to remove it")
+                    .accessibilityIdentifier("tray.word")
+                }
+                .scrollIndicators(.hidden)
+                .defaultScrollAnchor(.trailing)
+
+                Button("Delete letter", systemImage: "delete.left", action: onBackspace)
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(.glass)
+                    .controlSize(.large)
+                    .accessibilityIdentifier("tray.backspace")
+
+                Button(action: onPlay) {
+                    Image(systemName: isSpeaking ? "speaker.wave.2.fill" : "play.fill")
+                        .symbolEffect(.variableColor.iterative, isActive: isSpeaking)
+                        .contentTransition(.symbolEffect(.replace))
+                        .frame(width: 24)
+                }
+                .buttonStyle(.glassProminent)
+                .controlSize(.large)
+                .tint(verdict.isCorrect ? .green : .accentColor)
+                .accessibilityLabel("Play word")
+                .accessibilityIdentifier("tray.play")
+            }
+        }
+        .padding(14)
+        .glassEffect(.regular.tint((verdict.isCorrect ? Color.green : Color.accentColor).opacity(0.08)),
+                     in: .rect(cornerRadius: 28))
+        .overlay {
+            RoundedRectangle(cornerRadius: 28)
+                .strokeBorder(Color.green.opacity(verdict.isCorrect ? 0.6 : 0), lineWidth: 1.5)
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+    }
 }

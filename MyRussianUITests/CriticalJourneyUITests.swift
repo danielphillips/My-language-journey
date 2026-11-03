@@ -179,9 +179,16 @@ final class CriticalJourneyUITests: XCTestCase {
         XCTAssertTrue(app.images["tray.correct"].waitForExistence(timeout: 3), "кот is a real word, so a green tick shows")
         XCTAssertTrue(app.buttons["tray.play"].exists)
 
+        // "котщ" is not a word: the tick goes away; backspace restores "кот" and the tick.
+        let shcha = app.buttons["letter.щ"]
+        if !shcha.isHittable { app.swipeUp() }
+        shcha.press(forDuration: 0.6)
+        XCTAssertEqual(app.staticTexts["tray.word"].label, "котщ")
+        XCTAssertTrue(app.images["tray.correct"].waitForNonExistence(timeout: 3))
+
         app.buttons["tray.backspace"].tap()
-        XCTAssertEqual(app.staticTexts["tray.word"].label, "ко")
-        XCTAssertFalse(app.images["tray.correct"].exists)
+        XCTAssertEqual(app.staticTexts["tray.word"].label, "кот")
+        XCTAssertTrue(app.images["tray.correct"].waitForExistence(timeout: 3))
 
         app.buttons["tray.clear"].tap()
         XCTAssertTrue(app.staticTexts["tray.word"].waitForNonExistence(timeout: 3))
