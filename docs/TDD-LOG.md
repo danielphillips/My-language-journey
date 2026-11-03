@@ -1014,3 +1014,35 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.023 seconds.
 ✔ Test run with 158 tests in 31 suites passed after 0.031 seconds.
 ```
+
+### Check after alphabet performance work
+
+`swift test` → exit 0
+
+```
+✔ Suite "Russian text handling" passed after 0.053 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.053 seconds.
+✔ Suite "Vocabulary topics" passed after 0.053 seconds.
+✔ Suite "Study category persistence" passed after 0.054 seconds.
+✔ Suite "Confidence levels" passed after 0.053 seconds.
+✔ Suite "Study categories" passed after 0.053 seconds.
+✔ Suite "Pronunciation notes" passed after 0.053 seconds.
+✔ Suite "Word tray" passed after 0.053 seconds.
+✔ Suite "Goal progress" passed after 0.053 seconds.
+✔ Suite "Study timer" passed after 0.053 seconds.
+✔ Suite "Milestone status" passed after 0.053 seconds.
+✔ Suite "Goal settings" passed after 0.053 seconds.
+✔ Suite "Duplicate detection" passed after 0.053 seconds.
+✔ Suite "Topic breakdown" passed after 0.053 seconds.
+✔ Suite "Confidence distribution" passed after 0.053 seconds.
+✔ Suite "Audio file store" passed after 0.053 seconds.
+✔ Suite "Confidence segment filter" passed after 0.053 seconds.
+✔ Suite "Reference languages" passed after 0.053 seconds.
+✔ Suite "Study session validation" passed after 0.053 seconds.
+✔ Suite "Vocabulary list subtitle" passed after 0.053 seconds.
+✔ Suite "Proficiency levels" passed after 0.053 seconds.
+✔ Suite "Photo compression" passed after 0.053 seconds.
+✔ Suite "Russian alphabet" passed after 0.053 seconds.
+✔ Suite "Recording flow" passed after 0.055 seconds.
+✔ Test run with 158 tests in 31 suites passed after 0.059 seconds.
+```

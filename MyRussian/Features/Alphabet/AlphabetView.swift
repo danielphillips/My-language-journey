@@ -8,6 +8,8 @@ struct AlphabetView: View {
     @State private var selected: RussianLetter = RussianAlphabet.letters[0]
     @State private var taps = 0
     @State private var tray = WordTray()
+    @State private var verdict: WordVerdict = .empty
+    @State private var dictionaryCache: [String: Bool] = [:]
     @Query private var words: [VocabularyWord]
 
     /// 33 letters in rows of four. A plain (non-lazy) grid: small, and every tile exists for accessibility.
@@ -20,27 +22,26 @@ struct AlphabetView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
                     AlphabetHero(letter: selected,
-                                 isSpeaking: speaker.speakingText != nil,
+                                 speaker: speaker,
                                  speakLetter: { speak(selected) },
                                  speakWord: { speaker.speak(selected.exampleWord, slow: false) })
 
-                    GlassEffectContainer(spacing: 10) {
-                        Grid(horizontalSpacing: 10, verticalSpacing: 10) {
+                    Grid(horizontalSpacing: 10, verticalSpacing: 10) {
                             ForEach(rows, id: \.first!.id) { row in
                                 GridRow {
                                     ForEach(row) { letter in
                                         LetterTile(letter: letter, isSelected: letter == selected, onTap: {
-                                            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) { selected = letter }
+                                            selected = letter
                                             speak(letter)
                                         }, onLongPress: {
                                             withAnimation(.spring(response: 0.4, dampingFraction: 0.65)) { tray.append(letter) }
                                         })
+                                        .equatable()
                                     }
                                     // Keep the last row's tiles the same width as the others.
                                     ForEach(row.count..<4, id: \.self) { _ in Color.clear.gridCellUnsizedAxes([.horizontal, .vertical]) }
                                 }
                             }
-                        }
                     }
 
                     Legend()
@@ -56,7 +57,7 @@ struct AlphabetView: View {
             .background(Backdrop(letter: selected))
             .safeAreaInset(edge: .bottom) {
                 if !tray.isEmpty {
-                    WordTrayBar(tray: tray, verdict: verdict, isSpeaking: speaker.speakingText == tray.text,
+                    WordTrayBar(tray: tray, verdict: verdict, speaker: speaker,
                                 onPlay: { speaker.speak(tray.text) },
                                 onBackspace: { withAnimation(.snappy) { tray.removeLast() } },
                                 onClear: { withAnimation(.smooth) { tray.clear() } },
@@ -70,14 +71,25 @@ struct AlphabetView: View {
             .navigationTitle("Alphabet")
             .toolbarTitleDisplayMode(.inlineLarge)
             .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.8), trigger: taps)
+            .onAppear { speaker.prepare() }
             .onDisappear { speaker.stop() }
+            .onChange(of: tray.text) { updateVerdict() }
+            .onChange(of: words.count) { updateVerdict() }
         }
     }
 
-    private var verdict: WordVerdict {
-        WordChecker.verdict(for: tray.text,
-                            vocabulary: words.map { KnownWord(russian: $0.russian, meaning: $0.meaning) },
-                            isDictionaryWord: RussianDictionary.contains)
+    /// Runs only when the tray's letters (or your vocabulary) change, never on every redraw.
+    private func updateVerdict() {
+        var cache = dictionaryCache
+        verdict = WordChecker.verdict(for: tray.text,
+                                      vocabulary: words.map { KnownWord(russian: $0.russian, meaning: $0.meaning) },
+                                      isDictionaryWord: { word in
+                                          if let known = cache[word] { return known }
+                                          let found = RussianDictionary.contains(word)
+                                          cache[word] = found
+                                          return found
+                                      })
+        dictionaryCache = cache
     }
 
     private func speak(_ letter: RussianLetter) {
@@ -90,11 +102,13 @@ struct AlphabetView: View {
 
 private struct AlphabetHero: View {
     let letter: RussianLetter
-    let isSpeaking: Bool
+    let speaker: RussianSpeaker
     let speakLetter: () -> Void
     let speakWord: () -> Void
 
     @ScaledMetric(relativeTo: .largeTitle) private var glyphSize: CGFloat = 96
+
+    private var isSpeaking: Bool { speaker.speakingText != nil }
 
     private var kindName: String {
         switch letter.kind {
@@ -117,9 +131,8 @@ private struct AlphabetHero: View {
                 .foregroundStyle(.primary)
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
-                .contentTransition(.interpolate)
-                .id(letter.id)
-                .transition(.blurReplace)
+                .contentTransition(.opacity)
+                .animation(.easeOut(duration: 0.15), value: letter)
             }
             .buttonStyle(.plain)
             .accessibilityLabel("\(letter.uppercase), \(letter.spokenName)")
@@ -167,7 +180,6 @@ private struct AlphabetHero: View {
                 .accessibilityIdentifier("alphabet.hero.example")
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .animation(.smooth, value: letter)
         }
         .padding(22)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -178,7 +190,7 @@ private struct AlphabetHero: View {
 
 // MARK: - Tiles
 
-private struct LetterTile: View {
+private struct LetterTile: View, Equatable {
     let letter: RussianLetter
     let isSelected: Bool
     let onTap: () -> Void
@@ -186,6 +198,11 @@ private struct LetterTile: View {
 
     @State private var pulse = 0
     @State private var lift = 0
+
+    /// Closures are ignored: a tile redraws only when its letter or selection changes.
+    nonisolated static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.letter == rhs.letter && lhs.isSelected == rhs.isSelected
+    }
 
     private var tint: Color {
         switch letter.kind {
@@ -240,7 +257,6 @@ private struct LetterTile: View {
                 }
                 .allowsHitTesting(false)
         }
-        .scaleEffect(isSelected ? 1.04 : 1)
         .keyframeAnimator(initialValue: CGFloat(1), trigger: lift) { content, scale in
             content.scaleEffect(scale)
         } keyframes: { _ in
@@ -249,7 +265,7 @@ private struct LetterTile: View {
                 SpringKeyframe(1.0, duration: 0.35)
             }
         }
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
+        .animation(.easeOut(duration: 0.15), value: isSelected)
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
         .accessibilityLabel("\(letter.uppercase), \(letter.spokenName)")
@@ -301,9 +317,8 @@ private struct Backdrop: View {
                 .font(.system(size: 420, weight: .bold, design: .serif))
                 .foregroundStyle(Color.accentColor.opacity(0.06))
                 .offset(x: 60, y: -40)
-                .id(letter.id)
-                .transition(.opacity)
-                .animation(.easeInOut(duration: 0.5), value: letter)
+                .contentTransition(.opacity)
+                .animation(.easeInOut(duration: 0.3), value: letter)
                 .accessibilityHidden(true)
         }
         .ignoresSafeArea()
@@ -320,11 +335,13 @@ private struct Backdrop: View {
 private struct WordTrayBar: View {
     let tray: WordTray
     let verdict: WordVerdict
-    let isSpeaking: Bool
+    let speaker: RussianSpeaker
     let onPlay: () -> Void
     let onBackspace: () -> Void
     let onClear: () -> Void
     let onRemove: (UUID) -> Void
+
+    private var isSpeaking: Bool { speaker.speakingText == tray.text }
 
     private var status: (text: String, meaning: String?) {
         switch verdict {
