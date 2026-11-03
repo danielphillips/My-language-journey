@@ -162,6 +162,31 @@ final class CriticalJourneyUITests: XCTestCase {
         XCTAssertTrue(app.buttons["alphabet.hero.example"].label.contains("жук"))
     }
 
+    func testLongPressingLettersBuildsAWordInTheTray() {
+        let app = launch(reset: true)
+        completeOnboarding(app)
+        app.tabBars.buttons["Alphabet"].tap()
+
+        for letter in ["к", "о", "т"] {
+            let tile = app.buttons["letter.\(letter)"]
+            if !tile.isHittable { app.swipeUp() }
+            tile.press(forDuration: 0.6)
+        }
+
+        let word = app.staticTexts["tray.word"]
+        XCTAssertTrue(word.waitForExistence(timeout: 3))
+        XCTAssertEqual(word.label, "кот")
+        XCTAssertTrue(app.images["tray.correct"].waitForExistence(timeout: 3), "кот is a real word, so a green tick shows")
+        XCTAssertTrue(app.buttons["tray.play"].exists)
+
+        app.buttons["tray.backspace"].tap()
+        XCTAssertEqual(app.staticTexts["tray.word"].label, "ко")
+        XCTAssertFalse(app.images["tray.correct"].exists)
+
+        app.buttons["tray.clear"].tap()
+        XCTAssertTrue(app.staticTexts["tray.word"].waitForNonExistence(timeout: 3))
+    }
+
     private func addPronunciation(_ app: XCUIApplication, text: String, languageID: String) {
         app.buttons["detail.addPronunciation"].tap()
         let field = app.textFields["pronunciation.text"]
