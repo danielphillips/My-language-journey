@@ -1068,3 +1068,35 @@ error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRuss
 error: Build failed
 error: fatalError
 ```
+
+### GREEN: letter audio library
+
+`swift test` → exit 0
+
+```
+✔ Suite "Roadmap progress" passed after 0.018 seconds.
+✔ Suite "Goal settings" passed after 0.018 seconds.
+✔ Suite "Study category persistence" passed after 0.018 seconds.
+✔ Suite "Duplicate detection" passed after 0.018 seconds.
+✔ Suite "Milestone status" passed after 0.018 seconds.
+✔ Suite "Confidence levels" passed after 0.018 seconds.
+✔ Suite "Reference languages" passed after 0.018 seconds.
+✔ Suite "Confidence segment filter" passed after 0.018 seconds.
+✔ Suite "Word tray" passed after 0.018 seconds.
+✔ Suite "Exam date" passed after 0.018 seconds.
+✔ Suite "Confidence distribution" passed after 0.018 seconds.
+✔ Suite "Topic filter" passed after 0.018 seconds.
+✔ Suite "Vocabulary topics" passed after 0.018 seconds.
+✔ Suite "Photo compression" passed after 0.018 seconds.
+✔ Suite "Study statistics" passed after 0.019 seconds.
+✔ Suite "Russian text handling" passed after 0.018 seconds.
+✔ Suite "Study session validation" passed after 0.019 seconds.
+✔ Suite "Study categories" passed after 0.019 seconds.
+✔ Suite "Russian alphabet" passed after 0.019 seconds.
+✔ Suite "Audio file store" passed after 0.019 seconds.
+✔ Suite "Goal progress" passed after 0.019 seconds.
+✔ Suite "Vocabulary list subtitle" passed after 0.019 seconds.
+✔ Suite "Vocabulary query" passed after 0.019 seconds.
+✔ Suite "Recording flow" passed after 0.021 seconds.
+✔ Test run with 163 tests in 32 suites passed after 0.023 seconds.
+```
