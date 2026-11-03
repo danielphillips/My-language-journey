@@ -146,6 +146,22 @@ final class CriticalJourneyUITests: XCTestCase {
         XCTAssertTrue(app.keyboards.element.waitForExistence(timeout: 3))
     }
 
+    func testAlphabetTabShowsAllLettersAndTappingOneSelectsIt() {
+        let app = launch(reset: true)
+        completeOnboarding(app)
+
+        app.tabBars.buttons["Alphabet"].tap()
+        XCTAssertTrue(app.buttons["letter.а"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'letter.'")).count, 33)
+
+        let zhe = app.buttons["letter.ж"]
+        if !zhe.isHittable { app.swipeUp() }
+        zhe.tap()
+        XCTAssertTrue(zhe.isSelected)
+        XCTAssertEqual(app.staticTexts["alphabet.hero.name"].label, "жэ")
+        XCTAssertTrue(app.buttons["alphabet.hero.example"].label.contains("жук"))
+    }
+
     private func addPronunciation(_ app: XCUIApplication, text: String, languageID: String) {
         app.buttons["detail.addPronunciation"].tap()
         let field = app.textFields["pronunciation.text"]
