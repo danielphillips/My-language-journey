@@ -825,3 +825,32 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.023 seconds.
 ✔ Test run with 139 tests in 28 suites passed after 0.024 seconds.
 ```
+
+### RED: Russian alphabet data
+
+`swift test` → exit 1
+
+```
+error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift:6:19: error: cannot find 'RussianAlphabet' in scope
+   |                   `- error: cannot find 'RussianAlphabet' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift:10:29: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                             `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift:11:29: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                             `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift:15:58: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                                                          `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift:17:57: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                                                         `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift:32:50: error: generic parameter 'some StringProtocol' could not be inferred
+   |                                                  `- error: generic parameter 'some StringProtocol' could not be inferred
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift:35:23: error: generic parameter 'some StringProtocol' could not be inferred
+   |                       `- error: generic parameter 'some StringProtocol' could not be inferred
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift:40:33: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                                 `- error: cannot infer key path type from context; consider explicitly specifying a root type
+error: SwiftCompile normal x86_64 failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/AlphabetTests.swift:6:19: error: cannot find 'RussianAlphabet' in scope
+   |                   `- error: cannot find 'RussianAlphabet' in scope
+error: Build failed
+error: fatalError
+```
