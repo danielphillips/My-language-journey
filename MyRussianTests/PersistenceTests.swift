@@ -332,6 +332,55 @@ struct WordPhotoTests {
 }
 
 @MainActor
+@Suite("Letter recordings")
+struct LetterRecordingTests {
+    func take(_ env: TestEnvironment) throws -> RecordingResult {
+        let location = env.audioStore.newRecordingLocation()
+        try Data([1, 2, 3]).write(to: location.url)
+        return RecordingResult(id: UUID(), relativePath: location.relativePath, duration: 0.9,
+                               createdAt: env.now, kind: .personal, source: .recorded)
+    }
+
+    @Test func savingALetterRecordingMarksItRecorded() throws {
+        let env = try TestEnvironment()
+        let store = LetterRecordingStore(context: env.context, audioStore: env.audioStore)
+        store.save(try take(env), letterID: "ж", kind: .letterName)
+        #expect(store.library().hasRecordedName("ж"))
+        #expect(store.library().playback(for: "ж", .letterName) == .personal)
+        #expect(store.library().playback(for: "ж", .exampleWord) == .synthesized)
+    }
+
+    @Test func recordingAgainReplacesTheOldTakeAndDeletesItsFile() throws {
+        let env = try TestEnvironment()
+        let store = LetterRecordingStore(context: env.context, audioStore: env.audioStore)
+        let first = try take(env)
+        store.save(first, letterID: "ж", kind: .letterName)
+        store.save(try take(env), letterID: "ж", kind: .letterName)
+        #expect(try env.context.fetchCount(FetchDescriptor<LetterRecording>()) == 1)
+        #expect(!env.audioStore.fileExists(first.relativePath))
+    }
+
+    @Test func deletingRemovesTheRecordingAndFile() throws {
+        let env = try TestEnvironment()
+        let store = LetterRecordingStore(context: env.context, audioStore: env.audioStore)
+        let result = try take(env)
+        store.save(result, letterID: "к", kind: .exampleWord)
+        store.delete(letterID: "к", kind: .exampleWord)
+        #expect(!store.library().has("к", .exampleWord))
+        #expect(!env.audioStore.fileExists(result.relativePath))
+    }
+
+    @Test func recordingsWithMissingFilesAreTreatedAsAbsent() throws {
+        let env = try TestEnvironment()
+        let store = LetterRecordingStore(context: env.context, audioStore: env.audioStore)
+        let result = try take(env)
+        store.save(result, letterID: "а", kind: .letterName)
+        try FileManager.default.removeItem(at: env.audioStore.url(for: result.relativePath))
+        #expect(!store.library().hasRecordedName("а"))
+    }
+}
+
+@MainActor
 @Suite("Persistence across launches")
 struct RelaunchPersistenceTests {
     @Test func wordsNotesAndRecordingsSurviveReopeningTheStore() throws {
