@@ -27,11 +27,6 @@ struct AlphabetView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
-                    AlphabetHero(letter: selected,
-                                 speaker: speaker,
-                                 speakLetter: { speak(selected) },
-                                 speakWord: { play(selected, .exampleWord) })
-
                     LetterVoiceCard(letter: selected,
                                     library: library,
                                     flow: app.recordingFlow,
@@ -76,6 +71,14 @@ struct AlphabetView: View {
                 .padding(.bottom, 32)
             }
             .background(Backdrop(letter: selected))
+            // The selected-letter card stays pinned; the voice card and grid scroll under its glass.
+            .safeAreaInset(edge: .top, spacing: 12) {
+                AlphabetHero(letter: selected,
+                             speaker: speaker,
+                             speakLetter: { speak(selected) },
+                             speakWord: { play(selected, .exampleWord) })
+                    .padding(.horizontal)
+            }
             .safeAreaInset(edge: .bottom) {
                 if !tray.isEmpty {
                     WordTrayBar(tray: tray, verdict: verdict, speaker: speaker,
@@ -247,7 +250,6 @@ private struct AlphabetHero: View {
         .padding(22)
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassEffect(.regular.tint(Color.accentColor.opacity(0.08)), in: .rect(cornerRadius: 32))
-        .padding(.top, 4)
     }
 }
 
