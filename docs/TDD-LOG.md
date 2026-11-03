@@ -886,3 +886,35 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.024 seconds.
 ✔ Test run with 144 tests in 29 suites passed after 0.026 seconds.
 ```
+
+### Check after alphabet tab
+
+`swift test` → exit 0
+
+```
+✔ Suite "Confidence segment filter" passed after 0.015 seconds.
+✔ Suite "Roadmap progress" passed after 0.015 seconds.
+✔ Suite "Confidence levels" passed after 0.015 seconds.
+✔ Suite "Russian text handling" passed after 0.015 seconds.
+✔ Suite "Duplicate detection" passed after 0.015 seconds.
+✔ Suite "Milestone status" passed after 0.015 seconds.
+✔ Suite "Topic breakdown" passed after 0.015 seconds.
+✔ Suite "Study category persistence" passed after 0.015 seconds.
+✔ Suite "Exam date" passed after 0.015 seconds.
+✔ Suite "Proficiency levels" passed after 0.015 seconds.
+✔ Suite "Milestone catalogue" passed after 0.015 seconds.
+✔ Suite "Photo compression" passed after 0.015 seconds.
+✔ Suite "Goal settings" passed after 0.015 seconds.
+✔ Suite "Study categories" passed after 0.015 seconds.
+✔ Suite "Study session validation" passed after 0.015 seconds.
+✔ Suite "Vocabulary query" passed after 0.015 seconds.
+✔ Suite "Study timer" passed after 0.015 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.015 seconds.
+✔ Suite "Study statistics" passed after 0.015 seconds.
+✔ Suite "Reference languages" passed after 0.015 seconds.
+✔ Suite "Topic filter" passed after 0.015 seconds.
+✔ Suite "Pronunciation notes" passed after 0.015 seconds.
+✔ Suite "Audio file store" passed after 0.025 seconds.
+✔ Suite "Recording flow" passed after 0.048 seconds.
+✔ Test run with 144 tests in 29 suites passed after 0.049 seconds.
+```

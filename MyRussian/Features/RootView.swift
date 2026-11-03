@@ -16,6 +16,9 @@ struct RootView: View {
             Tab("Vocabulary", systemImage: "character.book.closed") {
                 VocabularyView()
             }
+            Tab("Alphabet", systemImage: "character") {
+                AlphabetView()
+            }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
         .dismissesKeyboardOnTapOutside()
