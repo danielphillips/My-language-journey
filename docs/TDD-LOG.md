@@ -950,3 +950,35 @@ error: fatalError
 error: Build failed
 error: fatalError
 ```
+
+### GREEN: word tray and checker
+
+`swift test` → exit 0
+
+```
+✔ Suite "Confidence segment filter" passed after 0.023 seconds.
+✔ Suite "Photo compression" passed after 0.023 seconds.
+✔ Suite "Russian alphabet" passed after 0.023 seconds.
+✔ Suite "Study session validation" passed after 0.023 seconds.
+✔ Suite "Study category persistence" passed after 0.023 seconds.
+✔ Suite "Word tray" passed after 0.023 seconds.
+✔ Suite "Word checker" passed after 0.023 seconds.
+✔ Suite "Study categories" passed after 0.023 seconds.
+✔ Suite "Reference languages" passed after 0.023 seconds.
+✔ Suite "Proficiency levels" passed after 0.023 seconds.
+✔ Suite "Study statistics" passed after 0.023 seconds.
+✔ Suite "Roadmap progress" passed after 0.023 seconds.
+✔ Suite "Goal progress" passed after 0.023 seconds.
+✔ Suite "Confidence distribution" passed after 0.023 seconds.
+✔ Suite "Exam date" passed after 0.023 seconds.
+✔ Suite "Vocabulary topics" passed after 0.023 seconds.
+✔ Suite "Audio file store" passed after 0.023 seconds.
+✔ Suite "Topic filter" passed after 0.023 seconds.
+✔ Suite "Vocabulary list subtitle" passed after 0.023 seconds.
+✔ Suite "Study timer" passed after 0.023 seconds.
+✔ Suite "Confidence levels" passed after 0.023 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.023 seconds.
+✔ Suite "Russian text handling" passed after 0.022 seconds.
+✔ Suite "Recording flow" passed after 0.026 seconds.
+✔ Test run with 158 tests in 31 suites passed after 0.027 seconds.
+```
