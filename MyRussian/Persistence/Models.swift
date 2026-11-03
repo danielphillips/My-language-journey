@@ -211,3 +211,26 @@ final class AudioRecording {
     var kind: AudioKind { AudioKind(rawValue: kindRaw) ?? .personal }
     var source: AudioSource { AudioSource(rawValue: sourceRaw) ?? .recorded }
 }
+
+/// Your own recording of a letter's name or its example word (Alphabet tab). One per letter and kind.
+@Model
+final class LetterRecording {
+    var id: UUID = UUID()
+    var letterID: String = ""
+    var kindRaw: String = LetterAudioKind.letterName.rawValue
+    /// File name inside the app's recordings directory.
+    var relativePath: String = ""
+    var duration: Double = 0
+    var createdAt: Date = Date.now
+
+    init(letterID: String, kind: LetterAudioKind, result: RecordingResult) {
+        self.id = result.id
+        self.letterID = letterID
+        self.kindRaw = kind.rawValue
+        self.relativePath = result.relativePath
+        self.duration = result.duration
+        self.createdAt = result.createdAt
+    }
+
+    var kind: LetterAudioKind { LetterAudioKind(rawValue: kindRaw) ?? .letterName }
+}

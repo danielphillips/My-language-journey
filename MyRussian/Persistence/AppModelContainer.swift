@@ -8,7 +8,8 @@ enum AppModelContainer {
         MilestoneRecord.self,
         VocabularyWord.self,
         PronunciationNote.self,
-        AudioRecording.self
+        AudioRecording.self,
+        LetterRecording.self
     ])
 
     /// - Parameters:

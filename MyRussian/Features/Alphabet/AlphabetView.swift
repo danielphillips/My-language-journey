@@ -11,6 +11,12 @@ struct AlphabetView: View {
     @State private var verdict: WordVerdict = .empty
     @State private var dictionaryCache: [String: Bool] = [:]
     @Query private var words: [VocabularyWord]
+    @Query private var letterRecordings: [LetterRecording]
+    @Environment(AppEnvironment.self) private var app
+    @Environment(\.modelContext) private var context
+    @State private var library = LetterAudioLibrary(recorded: [])
+    /// What is being recorded right now (letter and kind), if anything.
+    @State private var recordingTarget: LetterAudioKey?
 
     /// 33 letters in rows of four. A plain (non-lazy) grid: small, and every tile exists for accessibility.
     private let rows: [[RussianLetter]] = stride(from: 0, to: RussianAlphabet.letters.count, by: 4).map {
@@ -24,13 +30,28 @@ struct AlphabetView: View {
                     AlphabetHero(letter: selected,
                                  speaker: speaker,
                                  speakLetter: { speak(selected) },
-                                 speakWord: { speaker.speak(selected.exampleWord, slow: false) })
+                                 speakWord: { play(selected, .exampleWord) })
+
+                    LetterVoiceCard(letter: selected,
+                                    library: library,
+                                    flow: app.recordingFlow,
+                                    recordingKind: recordingTarget?.letterID == selected.id ? recordingTarget?.kind : nil,
+                                    onRecord: { kind in startRecording(selected, kind) },
+                                    onStop: finishRecording,
+                                    onPlayMine: { kind in play(selected, kind) },
+                                    onPlayVoice: { kind in play(selected, kind, preferSyntheticVoice: true) },
+                                    onDelete: { kind in
+                                        letterStore.delete(letterID: selected.id, kind: kind)
+                                        refreshLibrary()
+                                    })
 
                     Grid(horizontalSpacing: 10, verticalSpacing: 10) {
                             ForEach(rows, id: \.first!.id) { row in
                                 GridRow {
                                     ForEach(row) { letter in
-                                        LetterTile(letter: letter, isSelected: letter == selected, onTap: {
+                                        LetterTile(letter: letter, isSelected: letter == selected,
+                                                   isRecorded: library.hasRecordedName(letter.id), onTap: {
+                                            if app.recordingFlow.isRecording { finishRecording() }
                                             selected = letter
                                             speak(letter)
                                         }, onLongPress: {
@@ -71,8 +92,15 @@ struct AlphabetView: View {
             .navigationTitle("Alphabet")
             .toolbarTitleDisplayMode(.inlineLarge)
             .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.8), trigger: taps)
-            .onAppear { speaker.prepare() }
-            .onDisappear { speaker.stop() }
+            .onAppear {
+                speaker.prepare()
+                refreshLibrary()
+            }
+            .onDisappear {
+                finishRecording()
+                speaker.stop()
+            }
+            .onChange(of: letterRecordings.map(\.id)) { refreshLibrary() }
             .onChange(of: tray.text) { updateVerdict() }
             .onChange(of: words.count) { updateVerdict() }
         }
@@ -94,7 +122,42 @@ struct AlphabetView: View {
 
     private func speak(_ letter: RussianLetter) {
         taps += 1
-        speaker.speak(letter.spokenName)
+        play(letter, .letterName)
+    }
+
+    private var letterStore: LetterRecordingStore {
+        LetterRecordingStore(context: context, audioStore: app.audioStore)
+    }
+
+    private func refreshLibrary() {
+        library = letterStore.library()
+    }
+
+    /// Your own recording by default when you have one; otherwise (or on request) the synthetic voice.
+    private func play(_ letter: RussianLetter, _ kind: LetterAudioKind, preferSyntheticVoice: Bool = false) {
+        let text = kind == .letterName ? letter.spokenName : letter.exampleWord
+        if library.playback(for: letter.id, kind, preferSyntheticVoice: preferSyntheticVoice) == .personal,
+           let mine = letterStore.recording(letterID: letter.id, kind: kind) {
+            speaker.playRecording(at: app.audioStore.url(for: mine.relativePath), label: text)
+        } else {
+            speaker.speak(text, slow: kind == .letterName)
+        }
+    }
+
+    private func startRecording(_ letter: RussianLetter, _ kind: LetterAudioKind) {
+        speaker.stop()
+        app.player.stop()
+        recordingTarget = LetterAudioKey(letterID: letter.id, kind: kind)
+        Task { await app.recordingFlow.start() }
+    }
+
+    /// Stops any recording in progress and saves it to the letter it was started for.
+    private func finishRecording() {
+        guard let target = recordingTarget else { return }
+        recordingTarget = nil
+        guard let result = app.recordingFlow.stop() else { return }
+        letterStore.save(result, letterID: target.letterID, kind: target.kind)
+        refreshLibrary()
     }
 }
 
@@ -193,6 +256,8 @@ private struct AlphabetHero: View {
 private struct LetterTile: View, Equatable {
     let letter: RussianLetter
     let isSelected: Bool
+    /// You've recorded this letter's name: a subtle gold outline.
+    let isRecorded: Bool
     let onTap: () -> Void
     let onLongPress: () -> Void
 
@@ -201,7 +266,7 @@ private struct LetterTile: View, Equatable {
 
     /// Closures are ignored: a tile redraws only when its letter or selection changes.
     nonisolated static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.letter == rhs.letter && lhs.isSelected == rhs.isSelected
+        lhs.letter == rhs.letter && lhs.isSelected == rhs.isSelected && lhs.isRecorded == rhs.isRecorded
     }
 
     private var tint: Color {
@@ -237,6 +302,11 @@ private struct LetterTile: View, Equatable {
         .glassEffect(.regular.tint(tint).interactive(), in: .rect(cornerRadius: 20))
         .overlay {
             RoundedRectangle(cornerRadius: 20)
+                .strokeBorder(Theme.gold.opacity(0.75), lineWidth: isRecorded ? 1.2 : 0)
+                .padding(isSelected ? 3 : 0)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 20)
                 .strokeBorder(Color.accentColor, lineWidth: isSelected ? 2 : 0)
         }
         .overlay {
@@ -269,6 +339,7 @@ private struct LetterTile: View, Equatable {
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
         .accessibilityLabel("\(letter.uppercase), \(letter.spokenName)")
+        .accessibilityValue(isRecorded ? "Your recording" : "")
         .accessibilityHint("\(letter.kind.title). Double-tap to hear it.")
         .accessibilityAction { onTap() }
         .accessibilityAction(named: "Add to word") { onLongPress() }

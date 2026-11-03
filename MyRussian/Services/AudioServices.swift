@@ -116,10 +116,19 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
             stop()
             return
         }
+        play(id: id, url: url)
+    }
+
+    /// Plays from the start, even if this recording is already playing (rapid re-taps restart it).
+    func play(id: UUID, url: URL) {
         stop()
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
+            // Only touch the audio session when its category changed; it's a slow, blocking call.
+            let session = AVAudioSession.sharedInstance()
+            if session.category != .playback || session.mode != .default {
+                try session.setCategory(.playback, mode: .default)
+            }
+            try session.setActive(true)
             let player = try AVAudioPlayer(contentsOf: url)
             player.delegate = self
             guard player.play() else { throw CocoaError(.fileReadCorruptFile) }

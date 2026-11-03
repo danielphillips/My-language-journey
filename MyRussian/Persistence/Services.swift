@@ -254,3 +254,43 @@ struct VocabularyService {
         audioStore.url(for: recording.relativePath)
     }
 }
+
+@MainActor
+struct LetterRecordingStore {
+    let context: ModelContext
+    let audioStore: AudioFileStore
+
+    func all() -> [LetterRecording] {
+        (try? context.fetch(FetchDescriptor<LetterRecording>())) ?? []
+    }
+
+    func recording(letterID: String, kind: LetterAudioKind) -> LetterRecording? {
+        all().first { $0.letterID == letterID && $0.kind == kind && audioStore.fileExists($0.relativePath) }
+    }
+
+    /// Only recordings whose audio files exist count.
+    func library() -> LetterAudioLibrary {
+        LetterAudioLibrary(recorded: all()
+            .filter { audioStore.fileExists($0.relativePath) }
+            .map { LetterAudioKey(letterID: $0.letterID, kind: $0.kind) })
+    }
+
+    /// Saves a new take, replacing (and deleting the file of) any previous one for the same letter and kind.
+    func save(_ result: RecordingResult, letterID: String, kind: LetterAudioKind) {
+        removeExisting(letterID: letterID, kind: kind)
+        context.insert(LetterRecording(letterID: letterID, kind: kind, result: result))
+        try? context.save()
+    }
+
+    func delete(letterID: String, kind: LetterAudioKind) {
+        removeExisting(letterID: letterID, kind: kind)
+        try? context.save()
+    }
+
+    private func removeExisting(letterID: String, kind: LetterAudioKind) {
+        for old in all() where old.letterID == letterID && old.kind == kind {
+            try? audioStore.delete(old.relativePath)
+            context.delete(old)
+        }
+    }
+}

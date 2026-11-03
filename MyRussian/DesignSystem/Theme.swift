@@ -5,6 +5,13 @@ import MyRussianCore
 /// Liquid Glass is reserved for floating controls, as Apple's guidelines intend.
 enum Theme {
     static let cardRadius: CGFloat = 26
+
+    /// The icon's gold, a little deeper in light mode so it reads on pale backgrounds.
+    static let gold = Color(UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor(red: 0.95, green: 0.77, blue: 0.43, alpha: 1)
+            : UIColor(red: 0.80, green: 0.60, blue: 0.20, alpha: 1)
+    })
     static let spacing: CGFloat = 16
 
     /// Cyrillic is part of the identity: set Russian text in the system serif (New York).
