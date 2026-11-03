@@ -1046,3 +1046,25 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.055 seconds.
 ✔ Test run with 158 tests in 31 suites passed after 0.059 seconds.
 ```
+
+### RED: letter audio library
+
+`swift test` → exit 1
+
+```
+error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/LetterAudioTests.swift failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/LetterAudioTests.swift:6:19: error: cannot find 'LetterAudioLibrary' in scope
+   |                   `- error: cannot find 'LetterAudioLibrary' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/LetterAudioTests.swift:7:9: error: cannot find 'LetterAudioKey' in scope
+   |         `- error: cannot find 'LetterAudioKey' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/LetterAudioTests.swift:8:9: error: cannot find 'LetterAudioKey' in scope
+   |         `- error: cannot find 'LetterAudioKey' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/LetterAudioTests.swift:9:9: error: cannot find 'LetterAudioKey' in scope
+   |         `- error: cannot find 'LetterAudioKey' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/LetterAudioTests.swift:33:17: error: cannot find 'LetterAudioKind' in scope
+   |                 `- error: cannot find 'LetterAudioKind' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/LetterAudioTests.swift:34:17: error: cannot find 'LetterAudioKind' in scope
+   |                 `- error: cannot find 'LetterAudioKind' in scope
+error: Build failed
+error: fatalError
+```
