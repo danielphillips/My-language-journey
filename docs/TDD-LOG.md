@@ -918,3 +918,35 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.048 seconds.
 ✔ Test run with 144 tests in 29 suites passed after 0.049 seconds.
 ```
+
+### RED: word tray and checker
+
+`swift test` → exit 1
+
+```
+    |                    `- error: cannot find 'WordTray' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:50:20: error: cannot find 'WordTray' in scope
+    |                    `- error: cannot find 'WordTray' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:51:23: error: cannot find 'WordTray' in scope
+    |                       `- error: cannot find 'WordTray' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:52:37: error: cannot find 'WordTray' in scope
+    |                                     `- error: cannot find 'WordTray' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:62:17: error: cannot find 'WordChecker' in scope
+    |                 `- error: cannot find 'WordChecker' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:66:23: error: cannot find 'WordChecker' in scope
+    |                       `- error: cannot find 'WordChecker' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:72:17: error: cannot find 'WordChecker' in scope
+    |                 `- error: cannot find 'WordChecker' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:77:17: error: cannot find 'WordChecker' in scope
+    |                 `- error: cannot find 'WordChecker' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:82:23: error: cannot find 'WordChecker' in scope
+    |                       `- error: cannot find 'WordChecker' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:88:17: error: cannot find 'WordChecker' in scope
+    |                 `- error: cannot find 'WordChecker' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:93:23: error: cannot find 'WordChecker' in scope
+    |                       `- error: cannot find 'WordChecker' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WordTrayTests.swift:99:17: error: cannot find 'WordChecker' in scope
+    |                 `- error: cannot find 'WordChecker' in scope
+error: Build failed
+error: fatalError
+```
