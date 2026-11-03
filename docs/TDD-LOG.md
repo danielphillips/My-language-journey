@@ -854,3 +854,35 @@ error: SwiftCompile normal x86_64 failed with a nonzero exit code. Command line:
 error: Build failed
 error: fatalError
 ```
+
+### GREEN: Russian alphabet data
+
+`swift test` → exit 0
+
+```
+✔ Suite "Goal settings" passed after 0.020 seconds.
+✔ Suite "Study categories" passed after 0.020 seconds.
+✔ Suite "Reference languages" passed after 0.020 seconds.
+✔ Suite "Milestone status" passed after 0.020 seconds.
+✔ Suite "Confidence distribution" passed after 0.020 seconds.
+✔ Suite "Duplicate detection" passed after 0.020 seconds.
+✔ Suite "Photo compression" passed after 0.020 seconds.
+✔ Suite "Topic filter" passed after 0.020 seconds.
+✔ Suite "Pronunciation notes" passed after 0.020 seconds.
+✔ Suite "Russian alphabet" passed after 0.020 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.020 seconds.
+✔ Suite "Proficiency levels" passed after 0.020 seconds.
+✔ Suite "Russian text handling" passed after 0.020 seconds.
+✔ Suite "Milestone catalogue" passed after 0.021 seconds.
+✔ Suite "Topic breakdown" passed after 0.021 seconds.
+✔ Suite "Confidence levels" passed after 0.020 seconds.
+✔ Suite "Study session validation" passed after 0.020 seconds.
+✔ Suite "Vocabulary list subtitle" passed after 0.020 seconds.
+✔ Suite "Vocabulary query" passed after 0.021 seconds.
+✔ Suite "Goal progress" passed after 0.021 seconds.
+✔ Suite "Vocabulary topics" passed after 0.021 seconds.
+✔ Suite "Exam date" passed after 0.021 seconds.
+✔ Suite "Study category persistence" passed after 0.021 seconds.
+✔ Suite "Recording flow" passed after 0.024 seconds.
+✔ Test run with 144 tests in 29 suites passed after 0.026 seconds.
+```
