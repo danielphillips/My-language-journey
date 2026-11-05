@@ -1164,3 +1164,35 @@ error: SwiftCompile normal x86_64 failed with a nonzero exit code. Command line:
 error: Build failed
 error: fatalError
 ```
+
+### GREEN: widget snapshot
+
+`swift test` → exit 0
+
+```
+✔ Suite "Goal progress" passed after 0.031 seconds.
+✔ Suite "Study timer" passed after 0.031 seconds.
+✔ Suite "Letter audio library" passed after 0.031 seconds.
+✔ Suite "Confidence levels" passed after 0.031 seconds.
+✔ Suite "Study categories" passed after 0.031 seconds.
+✔ Suite "Topic filter" passed after 0.031 seconds.
+✔ Suite "Duplicate detection" passed after 0.031 seconds.
+✔ Suite "Milestone status" passed after 0.031 seconds.
+✔ Suite "Audio file store" passed after 0.031 seconds.
+✔ Suite "Study category persistence" passed after 0.031 seconds.
+✔ Suite "Milestone catalogue" passed after 0.031 seconds.
+✔ Suite "Study session validation" passed after 0.031 seconds.
+✔ Suite "Study statistics" passed after 0.031 seconds.
+✔ Suite "Russian alphabet" passed after 0.031 seconds.
+✔ Suite "Vocabulary query" passed after 0.031 seconds.
+✔ Suite "Confidence distribution" passed after 0.031 seconds.
+✔ Suite "Exam date" passed after 0.031 seconds.
+✔ Suite "Widget snapshot" passed after 0.031 seconds.
+✔ Suite "Word tray" passed after 0.031 seconds.
+✔ Suite "Confidence segment filter" passed after 0.031 seconds.
+✔ Suite "Topic breakdown" passed after 0.031 seconds.
+✔ Suite "Russian text handling" passed after 0.031 seconds.
+✔ Suite "Word checker" passed after 0.031 seconds.
+✔ Suite "Recording flow" passed after 0.035 seconds.
+✔ Test run with 172 tests in 33 suites passed after 0.037 seconds.
+```
