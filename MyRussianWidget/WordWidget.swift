@@ -13,14 +13,30 @@ struct WordProvider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: SelectWordIntent, in context: Context) async -> WordEntry {
-        let word = SharedVocabulary.load().resolve(selectedID: configuration.word?.id)
+        let word = SharedVocabulary.load().word(for: configuration.word.choice, at: .now, calendar: .current)
         return WordEntry(date: .now, word: word ?? (context.isPreview ? .sample : nil))
     }
 
     func timeline(for configuration: SelectWordIntent, in context: Context) async -> Timeline<WordEntry> {
-        let word = SharedVocabulary.load().resolve(selectedID: configuration.word?.id)
-        // The app asks WidgetKit to reload whenever your vocabulary changes, so no polling is needed.
-        return Timeline(entries: [WordEntry(date: .now, word: word)], policy: .never)
+        let snapshot = SharedVocabulary.load()
+        let choice = configuration.word.choice
+        let calendar = Calendar.current
+        let now = Date.now
+
+        guard choice == .random else {
+            // A chosen word never changes by itself; the app reloads the widget when your vocabulary changes.
+            return Timeline(entries: [WordEntry(date: now, word: snapshot.word(for: choice, at: now, calendar: calendar))],
+                            policy: .never)
+        }
+
+        // Random word: the current slot plus the next three 05:00/17:00 changes (two days), then ask again.
+        var entries = [WordEntry(date: now, word: snapshot.word(for: .random, at: now, calendar: calendar))]
+        var next = WordRotation.nextSlotStart(after: now, calendar: calendar)
+        for _ in 0..<3 {
+            entries.append(WordEntry(date: next, word: snapshot.word(for: .random, at: next, calendar: calendar)))
+            next = WordRotation.nextSlotStart(after: next, calendar: calendar)
+        }
+        return Timeline(entries: entries, policy: .atEnd)
     }
 }
 

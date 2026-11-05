@@ -398,6 +398,7 @@ struct WidgetSnapshotWriterTests {
         let где = try #require(snapshot.words.first { $0.russian == "где" })
         #expect(где.id == word.id.uuidString)
         #expect(где.pronunciationLine == "🇫🇷 Kadé")
+        #expect(где.confidence == ConfidenceLevel.learning.rawValue, "Confidence drives the random word's weighting")
     }
 }
 

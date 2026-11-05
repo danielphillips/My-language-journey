@@ -1504,3 +1504,35 @@ error: fatalError
 ✔ Suite "Random word" passed after 0.028 seconds.
 ✔ Test run with 189 tests in 36 suites passed after 0.029 seconds.
 ```
+
+### Check after widget random option
+
+`swift test` → exit 0
+
+```
+✔ Suite "Russian alphabet" passed after 0.032 seconds.
+✔ Suite "Milestone catalogue" passed after 0.032 seconds.
+✔ Suite "Goal progress" passed after 0.032 seconds.
+✔ Suite "Widget snapshot" passed after 0.032 seconds.
+✔ Suite "Confidence segment filter" passed after 0.032 seconds.
+✔ Suite "Russian text handling" passed after 0.032 seconds.
+✔ Suite "Vocabulary topics" passed after 0.032 seconds.
+✔ Suite "Topic filter" passed after 0.032 seconds.
+✔ Suite "Confidence levels" passed after 0.032 seconds.
+✔ Suite "Study categories" passed after 0.032 seconds.
+✔ Suite "Topic breakdown" passed after 0.032 seconds.
+✔ Suite "Study category persistence" passed after 0.032 seconds.
+✔ Suite "Audio file store" passed after 0.032 seconds.
+✔ Suite "Goal settings" passed after 0.032 seconds.
+✔ Suite "Lock-screen pronunciation line" passed after 0.032 seconds.
+✔ Suite "Word checker" passed after 0.032 seconds.
+✔ Suite "Roadmap progress" passed after 0.032 seconds.
+✔ Suite "Vocabulary query" passed after 0.032 seconds.
+✔ Suite "Confidence distribution" passed after 0.033 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.033 seconds.
+✔ Suite "Word rotation (twice a day)" passed after 0.033 seconds.
+✔ Suite "Study session validation" passed after 0.033 seconds.
+✔ Suite "Recording flow" passed after 0.034 seconds.
+✔ Suite "Random word" passed after 0.043 seconds.
+✔ Test run with 189 tests in 36 suites passed after 0.044 seconds.
+```

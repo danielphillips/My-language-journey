@@ -35,7 +35,8 @@ This V1 was written in a Linux cloud environment without Xcode.
 
 - The app writes a read-only `widget-vocabulary.json` snapshot (words, meanings, pronunciation notes) to the App Group container whenever vocabulary changes, and reloads the widget only when the content changed.
 - App Group: `group.com.danielphillips.MyRussian`, in `Config/MyRussian.entitlements` and `Config/MyRussianWidget.entitlements`. It must exist in the developer account and be enabled on both App IDs: `com.danielphillips.MyRussian` and `com.danielphillips.MyRussian.Widget`.
-- Shared logic (choosing the word, fallback to the newest word, search) lives in `MyRussianCore` (`WidgetSnapshot`) and is unit-tested.
+- **Random word** (the default) changes at 05:00 and 17:00 local time. Words are dealt from a seeded deck per cycle: every word appears each cycle, Learning and Recognise words three times as often, and never twice in a row when the vocabulary allows. A word you pick yourself never rotates.
+- Shared logic (slots, the weighted deck, the choice, search) lives in `MyRussianCore` (`WidgetSnapshot`, `WordRotation`) and is unit-tested.
 
 ## Structure
 
