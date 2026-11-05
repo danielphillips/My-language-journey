@@ -1132,3 +1132,35 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.020 seconds.
 ✔ Test run with 163 tests in 32 suites passed after 0.021 seconds.
 ```
+
+### RED: widget snapshot
+
+`swift test` → exit 1
+
+```
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:56:45: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                                             `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:57:44: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                                            `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:58:47: error: cannot infer key path type from context; consider explicitly specifying a root type
+   |                                            `- error: cannot infer key path type from context; consider explicitly specifying a root type
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:64:20: error: cannot find 'WidgetWord' in scope
+   |                    `- error: cannot find 'WidgetWord' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:64:60: error: cannot find 'WidgetPronunciation' in scope
+   |                                                            `- error: cannot find 'WidgetPronunciation' in scope
+error: SwiftCompile normal x86_64 failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:6:63: error: cannot find type 'WidgetWord' in scope
+   |                                                               `- error: cannot find type 'WidgetWord' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:6:33: error: cannot find type 'WidgetPronunciation' in scope
+   |                                 `- error: cannot find type 'WidgetPronunciation' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:12:20: error: cannot find 'WidgetSnapshot' in scope
+   |                    `- error: cannot find 'WidgetSnapshot' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:13:78: error: cannot find 'WidgetPronunciation' in scope
+   |                                                                           `- error: cannot find 'WidgetPronunciation' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:16:28: error: cannot find 'WidgetPronunciation' in scope
+   |                            `- error: cannot find 'WidgetPronunciation' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:16:88: error: cannot find 'WidgetPronunciation' in scope
+   |                                                                                 `- error: cannot find 'WidgetPronunciation' in scope
+error: Build failed
+error: fatalError
+```
