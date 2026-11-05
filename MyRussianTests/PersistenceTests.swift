@@ -381,6 +381,27 @@ struct LetterRecordingTests {
 }
 
 @MainActor
+@Suite("Widget snapshot writer")
+struct WidgetSnapshotWriterTests {
+    @Test func writesWordsWithTheirPronunciationsForTheWidget() throws {
+        let env = try TestEnvironment()
+        let word = try env.vocabulary.addWord(russian: "где", meaning: "where")
+        env.vocabulary.addNote(try PronunciationNoteDraft(text: "Kadé", language: .french), to: word)
+        try env.vocabulary.addWord(russian: "кот", meaning: "cat")
+
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("Widget-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        try WidgetSnapshotWriter.write(words: env.vocabulary.allWords(), to: folder)
+
+        let snapshot = try WidgetSnapshot.decode(Data(contentsOf: folder.appendingPathComponent(WidgetSnapshot.fileName)))
+        #expect(Set(snapshot.words.map(\.russian)) == ["где", "кот"])
+        let где = try #require(snapshot.words.first { $0.russian == "где" })
+        #expect(где.id == word.id.uuidString)
+        #expect(где.pronunciationLine == "🇫🇷 Kadé")
+    }
+}
+
+@MainActor
 @Suite("Persistence across launches")
 struct RelaunchPersistenceTests {
     @Test func wordsNotesAndRecordingsSurviveReopeningTheStore() throws {
