@@ -9,6 +9,16 @@ public struct WidgetPronunciation: Codable, Hashable, Sendable {
         self.text = text
         self.flag = flag
     }
+
+    /// "FR", "PT", "EN". The lock screen renders emoji as solid tinted blocks, so it shows this instead of the flag.
+    public var languageLabel: String? {
+        switch ReferenceLanguage.allCases.first(where: { $0.flag == flag }) {
+        case .french: "FR"
+        case .brazilianPortuguese: "PT"
+        case .english: "EN"
+        case nil: nil
+        }
+    }
 }
 
 /// One vocabulary word, as shared with the widget extension.
@@ -35,6 +45,13 @@ public struct WidgetWord: Codable, Hashable, Identifiable, Sendable {
     /// "🇫🇷 Kadé": the first personal pronunciation, verbatim.
     public var pronunciationLine: String? {
         pronunciations.first.map { "\($0.flag) \($0.text)" }
+    }
+
+    /// "PT · patria sayou chayâ": the first pronunciation with a text label instead of the flag.
+    public var lockScreenPronunciationLine: String? {
+        pronunciations.first.map { note in
+            note.languageLabel.map { "\($0) · \(note.text)" } ?? note.text
+        }
     }
 
     /// Single-line lock-screen text: "где · Kadé", or "кот · cat" without a pronunciation.

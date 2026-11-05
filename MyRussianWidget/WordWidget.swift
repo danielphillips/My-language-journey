@@ -67,14 +67,16 @@ struct WordWidgetView: View {
             Text(verbatim: word.russian)
                 .font(.system(.title3, design: .serif, weight: .semibold))
                 .lineLimit(1)
-                .minimumScaleFactor(0.6)
+                .minimumScaleFactor(0.4) // long words like Потрясающе shrink to fit instead of truncating
+                .allowsTightening(true)
                 .widgetAccentable()
-            if let line = word.pronunciationLine {
+            if let line = word.lockScreenPronunciationLine {
                 // Your own spelling, exactly as you typed it.
                 Text(verbatim: line)
                     .font(.headline)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                    .minimumScaleFactor(0.6)
+                    .allowsTightening(true)
             }
             Text(verbatim: word.meaning)
                 .font(.caption)

@@ -1248,3 +1248,35 @@ error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRuss
 error: Build failed
 error: fatalError
 ```
+
+### GREEN: lock-screen pronunciation labels
+
+`swift test` → exit 0
+
+```
+✔ Suite "Word tray" passed after 0.028 seconds.
+✔ Suite "Pronunciation notes" passed after 0.028 seconds.
+✔ Suite "Vocabulary query" passed after 0.028 seconds.
+✔ Suite "Lock-screen pronunciation line" passed after 0.028 seconds.
+✔ Suite "Goal progress" passed after 0.028 seconds.
+✔ Suite "Study timer" passed after 0.028 seconds.
+✔ Suite "Reference languages" passed after 0.028 seconds.
+✔ Suite "Milestone catalogue" passed after 0.028 seconds.
+✔ Suite "Confidence levels" passed after 0.028 seconds.
+✔ Suite "Photo compression" passed after 0.028 seconds.
+✔ Suite "Study category persistence" passed after 0.028 seconds.
+✔ Suite "Vocabulary topics" passed after 0.028 seconds.
+✔ Suite "Vocabulary statistics" passed after 0.028 seconds.
+✔ Suite "Word checker" passed after 0.028 seconds.
+✔ Suite "Letter audio library" passed after 0.028 seconds.
+✔ Suite "Audio file store" passed after 0.028 seconds.
+✔ Suite "Duplicate detection" passed after 0.028 seconds.
+✔ Suite "Topic breakdown" passed after 0.028 seconds.
+✔ Suite "Exam date" passed after 0.028 seconds.
+✔ Suite "Topic filter" passed after 0.028 seconds.
+✔ Suite "Goal settings" passed after 0.028 seconds.
+✔ Suite "Roadmap progress" passed after 0.028 seconds.
+✔ Suite "Widget snapshot" passed after 0.028 seconds.
+✔ Suite "Recording flow" passed after 0.030 seconds.
+✔ Test run with 175 tests in 34 suites passed after 0.032 seconds.
+```
