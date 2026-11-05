@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generates MyRussian.xcodeproj (objectVersion 77, synchronized folders) and the shared scheme.
 
-Synchronized root groups mean Xcode picks up every file in MyRussian/, MyRussianTests/ and
-MyRussianUITests/ automatically, so the project file never needs per-file edits.
+Synchronized root groups mean Xcode picks up every file in MyRussian/, MyRussianWidget/,
+MyRussianTests/ and MyRussianUITests/ automatically, so the project file never needs per-file edits.
 Re-run after changing targets or build settings:  python3 scripts/generate_xcodeproj.py
 """
 import hashlib
@@ -12,6 +12,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 BUNDLE_PREFIX = "com.danielphillips"
 DEPLOYMENT_TARGET = "26.0"
 DEVELOPMENT_TEAM = "EZ89RRBK7E"
+# Shared by the app and the lock-screen widget; see Config/*.entitlements.
+APP_GROUP = "group.com.danielphillips.MyRussian"
 
 
 def oid(name: str) -> str:
@@ -32,6 +34,10 @@ ids = {n: oid(n) for n in [
     "unitConfigs", "unitDebug", "unitRelease",
     "uiConfigs", "uiDebug", "uiRelease",
     "corePackage", "coreProduct", "coreBuildFile",
+    "widgetGroup", "widgetProduct", "widgetTarget",
+    "widgetSources", "widgetFrameworks", "widgetResources",
+    "widgetProxy", "widgetDependency", "widgetConfigs", "widgetDebug", "widgetRelease",
+    "widgetCoreProduct", "widgetCoreBuildFile", "widgetEmbedBuildFile", "appEmbedExtensions",
 ]}
 
 
@@ -84,6 +90,7 @@ project_release = {**project_common,
 app_settings = {
     "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",
     "ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME": "AccentColor",
+    "CODE_SIGN_ENTITLEMENTS": "Config/MyRussian.entitlements",
     "CODE_SIGN_STYLE": "Automatic",
     "DEVELOPMENT_TEAM": DEVELOPMENT_TEAM,
     "CURRENT_PROJECT_VERSION": "1",
@@ -117,6 +124,23 @@ unit_settings = {
     "SWIFT_EMIT_LOC_STRINGS": "NO",
     "TARGETED_DEVICE_FAMILY": "1",
     "TEST_HOST": "$(BUILT_PRODUCTS_DIR)/MyRussian.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MyRussian",
+}
+widget_settings = {
+    "CODE_SIGN_ENTITLEMENTS": "Config/MyRussianWidget.entitlements",
+    "CODE_SIGN_STYLE": "Automatic",
+    "DEVELOPMENT_TEAM": DEVELOPMENT_TEAM,
+    "CURRENT_PROJECT_VERSION": "1",  # must match the app's
+    "GENERATE_INFOPLIST_FILE": "YES",
+    "INFOPLIST_FILE": "Config/MyRussianWidget-Info.plist",
+    "INFOPLIST_KEY_CFBundleDisplayName": "My Russian",
+    "INFOPLIST_KEY_NSHumanReadableCopyright": "",
+    "LD_RUNPATH_SEARCH_PATHS": ["$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks"],
+    "MARKETING_VERSION": "1.0",  # must match the app's
+    "PRODUCT_BUNDLE_IDENTIFIER": f"{BUNDLE_PREFIX}.MyRussian.Widget",
+    "PRODUCT_NAME": "$(TARGET_NAME)",
+    "SKIP_INSTALL": "YES",
+    "SWIFT_EMIT_LOC_STRINGS": "YES",
+    "TARGETED_DEVICE_FAMILY": "1",
 }
 ui_settings = {
     "CODE_SIGN_STYLE": "Automatic",
@@ -168,7 +192,8 @@ def phase(key, isa, name, files=""):
 
 
 def target(key, name, configs, phases, group, product, product_type, dependency=None, packages=""):
-    deps = f"\t\t\t\t{ids[dependency]} /* PBXTargetDependency */,\n" if dependency else ""
+    dependencies = [dependency] if isinstance(dependency, str) else (dependency or [])
+    deps = "".join(f"\t\t\t\t{ids[d]} /* PBXTargetDependency */,\n" for d in dependencies)
     phase_lines = "".join(f"\t\t\t\t{ids[p]} /* {n} */,\n" for p, n in phases)
     package_block = f"\t\t\tpackageProductDependencies = (\n{packages}\t\t\t);\n" if packages else ""
     return f"""\t\t{ids[key]} /* {name} */ = {{
@@ -201,6 +226,8 @@ pbxproj = f"""// !$*UTF8*$!
 
 /* Begin PBXBuildFile section */
 \t\t{ids['coreBuildFile']} /* MyRussianCore in Frameworks */ = {{isa = PBXBuildFile; productRef = {ids['coreProduct']} /* MyRussianCore */; }};
+\t\t{ids['widgetCoreBuildFile']} /* MyRussianCore in Frameworks */ = {{isa = PBXBuildFile; productRef = {ids['widgetCoreProduct']} /* MyRussianCore */; }};
+\t\t{ids['widgetEmbedBuildFile']} /* MyRussianWidget.appex in Embed Foundation Extensions */ = {{isa = PBXBuildFile; fileRef = {ids['widgetProduct']} /* MyRussianWidget.appex */; settings = {{ATTRIBUTES = (RemoveHeadersOnCopy, ); }}; }};
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -218,28 +245,52 @@ pbxproj = f"""// !$*UTF8*$!
 \t\t\tremoteGlobalIDString = {ids['appTarget']};
 \t\t\tremoteInfo = MyRussian;
 \t\t}};
+\t\t{ids['widgetProxy']} /* PBXContainerItemProxy */ = {{
+\t\t\tisa = PBXContainerItemProxy;
+\t\t\tcontainerPortal = {ids['project']} /* Project object */;
+\t\t\tproxyType = 1;
+\t\t\tremoteGlobalIDString = {ids['widgetTarget']};
+\t\t\tremoteInfo = MyRussianWidget;
+\t\t}};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+\t\t{ids['appEmbedExtensions']} /* Embed Foundation Extensions */ = {{
+\t\t\tisa = PBXCopyFilesBuildPhase;
+\t\t\tbuildActionMask = 2147483647;
+\t\t\tdstPath = "";
+\t\t\tdstSubfolderSpec = 13;
+\t\t\tfiles = (
+\t\t\t\t{ids['widgetEmbedBuildFile']} /* MyRussianWidget.appex in Embed Foundation Extensions */,
+\t\t\t);
+\t\t\tname = "Embed Foundation Extensions";
+\t\t\trunOnlyForDeploymentPostprocessing = 0;
+\t\t}};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 \t\t{ids['appProduct']} /* MyRussian.app */ = {{isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyRussian.app; sourceTree = BUILT_PRODUCTS_DIR; }};
 \t\t{ids['unitProduct']} /* MyRussianTests.xctest */ = {{isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyRussianTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; }};
 \t\t{ids['uiProduct']} /* MyRussianUITests.xctest */ = {{isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyRussianUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; }};
+\t\t{ids['widgetProduct']} /* MyRussianWidget.appex */ = {{isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyRussianWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; }};
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 \t\t{ids['appGroup']} /* MyRussian */ = {{isa = PBXFileSystemSynchronizedRootGroup; path = MyRussian; sourceTree = "<group>"; }};
 \t\t{ids['unitGroup']} /* MyRussianTests */ = {{isa = PBXFileSystemSynchronizedRootGroup; path = MyRussianTests; sourceTree = "<group>"; }};
 \t\t{ids['uiGroup']} /* MyRussianUITests */ = {{isa = PBXFileSystemSynchronizedRootGroup; path = MyRussianUITests; sourceTree = "<group>"; }};
+\t\t{ids['widgetGroup']} /* MyRussianWidget */ = {{isa = PBXFileSystemSynchronizedRootGroup; path = MyRussianWidget; sourceTree = "<group>"; }};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-{phase('appFrameworks', 'PBXFrameworksBuildPhase', 'Frameworks', f"\t\t\t\t{ids['coreBuildFile']} /* MyRussianCore in Frameworks */,\n")}{phase('unitFrameworks', 'PBXFrameworksBuildPhase', 'Frameworks')}{phase('uiFrameworks', 'PBXFrameworksBuildPhase', 'Frameworks')}/* End PBXFrameworksBuildPhase section */
+{phase('appFrameworks', 'PBXFrameworksBuildPhase', 'Frameworks', f"\t\t\t\t{ids['coreBuildFile']} /* MyRussianCore in Frameworks */,\n")}{phase('unitFrameworks', 'PBXFrameworksBuildPhase', 'Frameworks')}{phase('uiFrameworks', 'PBXFrameworksBuildPhase', 'Frameworks')}{phase('widgetFrameworks', 'PBXFrameworksBuildPhase', 'Frameworks', f"\t\t\t\t{ids['widgetCoreBuildFile']} /* MyRussianCore in Frameworks */,\n")}/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 \t\t{ids['mainGroup']} = {{
 \t\t\tisa = PBXGroup;
 \t\t\tchildren = (
 \t\t\t\t{ids['appGroup']} /* MyRussian */,
+\t\t\t\t{ids['widgetGroup']} /* MyRussianWidget */,
 \t\t\t\t{ids['unitGroup']} /* MyRussianTests */,
 \t\t\t\t{ids['uiGroup']} /* MyRussianUITests */,
 \t\t\t\t{ids['productsGroup']} /* Products */,
@@ -250,6 +301,7 @@ pbxproj = f"""// !$*UTF8*$!
 \t\t\tisa = PBXGroup;
 \t\t\tchildren = (
 \t\t\t\t{ids['appProduct']} /* MyRussian.app */,
+\t\t\t\t{ids['widgetProduct']} /* MyRussianWidget.appex */,
 \t\t\t\t{ids['unitProduct']} /* MyRussianTests.xctest */,
 \t\t\t\t{ids['uiProduct']} /* MyRussianUITests.xctest */,
 \t\t\t);
@@ -259,7 +311,7 @@ pbxproj = f"""// !$*UTF8*$!
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-{target('appTarget', 'MyRussian', 'appConfigs', [('appSources', 'Sources'), ('appFrameworks', 'Frameworks'), ('appResources', 'Resources')], 'appGroup', 'appProduct', 'com.apple.product-type.application', packages=f"\t\t\t\t{ids['coreProduct']} /* MyRussianCore */,\n")}{target('unitTarget', 'MyRussianTests', 'unitConfigs', [('unitSources', 'Sources'), ('unitFrameworks', 'Frameworks'), ('unitResources', 'Resources')], 'unitGroup', 'unitProduct', 'com.apple.product-type.bundle.unit-test', dependency='unitDependency')}{target('uiTarget', 'MyRussianUITests', 'uiConfigs', [('uiSources', 'Sources'), ('uiFrameworks', 'Frameworks'), ('uiResources', 'Resources')], 'uiGroup', 'uiProduct', 'com.apple.product-type.bundle.ui-testing', dependency='uiDependency')}/* End PBXNativeTarget section */
+{target('appTarget', 'MyRussian', 'appConfigs', [('appSources', 'Sources'), ('appFrameworks', 'Frameworks'), ('appResources', 'Resources'), ('appEmbedExtensions', 'Embed Foundation Extensions')], 'appGroup', 'appProduct', 'com.apple.product-type.application', dependency=['widgetDependency'], packages=f"\t\t\t\t{ids['coreProduct']} /* MyRussianCore */,\n")}{target('widgetTarget', 'MyRussianWidget', 'widgetConfigs', [('widgetSources', 'Sources'), ('widgetFrameworks', 'Frameworks'), ('widgetResources', 'Resources')], 'widgetGroup', 'widgetProduct', 'com.apple.product-type.app-extension', packages=f"\t\t\t\t{ids['widgetCoreProduct']} /* MyRussianCore */,\n")}{target('unitTarget', 'MyRussianTests', 'unitConfigs', [('unitSources', 'Sources'), ('unitFrameworks', 'Frameworks'), ('unitResources', 'Resources')], 'unitGroup', 'unitProduct', 'com.apple.product-type.bundle.unit-test', dependency='unitDependency')}{target('uiTarget', 'MyRussianUITests', 'uiConfigs', [('uiSources', 'Sources'), ('uiFrameworks', 'Frameworks'), ('uiResources', 'Resources')], 'uiGroup', 'uiProduct', 'com.apple.product-type.bundle.ui-testing', dependency='uiDependency')}/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 \t\t{ids['project']} /* Project object */ = {{
@@ -270,6 +322,9 @@ pbxproj = f"""// !$*UTF8*$!
 \t\t\t\tLastUpgradeCheck = 2600;
 \t\t\t\tTargetAttributes = {{
 \t\t\t\t\t{ids['appTarget']} = {{
+\t\t\t\t\t\tCreatedOnToolsVersion = 26.0;
+\t\t\t\t\t}};
+\t\t\t\t\t{ids['widgetTarget']} = {{
 \t\t\t\t\t\tCreatedOnToolsVersion = 26.0;
 \t\t\t\t\t}};
 \t\t\t\t\t{ids['unitTarget']} = {{
@@ -300,6 +355,7 @@ pbxproj = f"""// !$*UTF8*$!
 \t\t\tprojectRoot = "";
 \t\t\ttargets = (
 \t\t\t\t{ids['appTarget']} /* MyRussian */,
+\t\t\t\t{ids['widgetTarget']} /* MyRussianWidget */,
 \t\t\t\t{ids['unitTarget']} /* MyRussianTests */,
 \t\t\t\t{ids['uiTarget']} /* MyRussianUITests */,
 \t\t\t);
@@ -307,10 +363,10 @@ pbxproj = f"""// !$*UTF8*$!
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-{phase('appResources', 'PBXResourcesBuildPhase', 'Resources')}{phase('unitResources', 'PBXResourcesBuildPhase', 'Resources')}{phase('uiResources', 'PBXResourcesBuildPhase', 'Resources')}/* End PBXResourcesBuildPhase section */
+{phase('appResources', 'PBXResourcesBuildPhase', 'Resources')}{phase('unitResources', 'PBXResourcesBuildPhase', 'Resources')}{phase('uiResources', 'PBXResourcesBuildPhase', 'Resources')}{phase('widgetResources', 'PBXResourcesBuildPhase', 'Resources')}/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-{phase('appSources', 'PBXSourcesBuildPhase', 'Sources')}{phase('unitSources', 'PBXSourcesBuildPhase', 'Sources')}{phase('uiSources', 'PBXSourcesBuildPhase', 'Sources')}/* End PBXSourcesBuildPhase section */
+{phase('appSources', 'PBXSourcesBuildPhase', 'Sources')}{phase('unitSources', 'PBXSourcesBuildPhase', 'Sources')}{phase('uiSources', 'PBXSourcesBuildPhase', 'Sources')}{phase('widgetSources', 'PBXSourcesBuildPhase', 'Sources')}/* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 \t\t{ids['unitDependency']} /* PBXTargetDependency */ = {{
@@ -323,13 +379,18 @@ pbxproj = f"""// !$*UTF8*$!
 \t\t\ttarget = {ids['appTarget']} /* MyRussian */;
 \t\t\ttargetProxy = {ids['uiProxy']} /* PBXContainerItemProxy */;
 \t\t}};
+\t\t{ids['widgetDependency']} /* PBXTargetDependency */ = {{
+\t\t\tisa = PBXTargetDependency;
+\t\t\ttarget = {ids['widgetTarget']} /* MyRussianWidget */;
+\t\t\ttargetProxy = {ids['widgetProxy']} /* PBXContainerItemProxy */;
+\t\t}};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-{config('projectDebug', 'Debug', project_debug)}{config('projectRelease', 'Release', project_release)}{config('appDebug', 'Debug', app_settings)}{config('appRelease', 'Release', app_settings)}{config('unitDebug', 'Debug', unit_settings)}{config('unitRelease', 'Release', unit_settings)}{config('uiDebug', 'Debug', ui_settings)}{config('uiRelease', 'Release', ui_settings)}/* End XCBuildConfiguration section */
+{config('projectDebug', 'Debug', project_debug)}{config('projectRelease', 'Release', project_release)}{config('appDebug', 'Debug', app_settings)}{config('appRelease', 'Release', app_settings)}{config('unitDebug', 'Debug', unit_settings)}{config('unitRelease', 'Release', unit_settings)}{config('uiDebug', 'Debug', ui_settings)}{config('uiRelease', 'Release', ui_settings)}{config('widgetDebug', 'Debug', widget_settings)}{config('widgetRelease', 'Release', widget_settings)}/* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-{config_list('projectConfigs', 'projectDebug', 'projectRelease', 'PBXProject "MyRussian"')}{config_list('appConfigs', 'appDebug', 'appRelease', 'PBXNativeTarget "MyRussian"')}{config_list('unitConfigs', 'unitDebug', 'unitRelease', 'PBXNativeTarget "MyRussianTests"')}{config_list('uiConfigs', 'uiDebug', 'uiRelease', 'PBXNativeTarget "MyRussianUITests"')}/* End XCConfigurationList section */
+{config_list('projectConfigs', 'projectDebug', 'projectRelease', 'PBXProject "MyRussian"')}{config_list('appConfigs', 'appDebug', 'appRelease', 'PBXNativeTarget "MyRussian"')}{config_list('unitConfigs', 'unitDebug', 'unitRelease', 'PBXNativeTarget "MyRussianTests"')}{config_list('uiConfigs', 'uiDebug', 'uiRelease', 'PBXNativeTarget "MyRussianUITests"')}{config_list('widgetConfigs', 'widgetDebug', 'widgetRelease', 'PBXNativeTarget "MyRussianWidget"')}/* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
 \t\t{ids['corePackage']} /* XCLocalSwiftPackageReference "Packages/MyRussianCore" */ = {{
@@ -340,6 +401,10 @@ pbxproj = f"""// !$*UTF8*$!
 
 /* Begin XCSwiftPackageProductDependency section */
 \t\t{ids['coreProduct']} /* MyRussianCore */ = {{
+\t\t\tisa = XCSwiftPackageProductDependency;
+\t\t\tproductName = MyRussianCore;
+\t\t}};
+\t\t{ids['widgetCoreProduct']} /* MyRussianCore */ = {{
 \t\t\tisa = XCSwiftPackageProductDependency;
 \t\t\tproductName = MyRussianCore;
 \t\t}};
