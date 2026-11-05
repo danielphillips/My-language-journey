@@ -29,6 +29,14 @@ This V1 was written in a Linux cloud environment without Xcode.
 - ✅ **Verified:** all 113 core tests pass (Swift 6.4.2). `LiveTimerStore` and `DurationFormat` compiled and passed their app tests. All app and test files pass the Swift parser.
 - ⚠️ **Unverified:** compiling the SwiftUI, SwiftData and AVFoundation code, the SwiftData integration tests, the UI tests, and the visual design. Expect a few compile fixes on the first Xcode build.
 
+## Lock-screen widget
+
+`MyRussianWidget` is a WidgetKit extension (rectangular and inline lock-screen widgets) showing one chosen word with your first pronunciation note, verbatim.
+
+- The app writes a read-only `widget-vocabulary.json` snapshot (words, meanings, pronunciation notes) to the App Group container whenever vocabulary changes, and reloads the widget only when the content changed.
+- App Group: `group.com.danielphillips.MyRussian`, in `Config/MyRussian.entitlements` and `Config/MyRussianWidget.entitlements`. It must exist in the developer account and be enabled on both App IDs: `com.danielphillips.MyRussian` and `com.danielphillips.MyRussian.Widget`.
+- Shared logic (choosing the word, fallback to the newest word, search) lives in `MyRussianCore` (`WidgetSnapshot`) and is unit-tested.
+
 ## Structure
 
 ```
@@ -40,6 +48,9 @@ MyRussian/
   DesignSystem/           Theme, cards and formatting
   Features/Journey/       Dashboard, sessions, history, roadmap, goal, onboarding
   Features/Vocabulary/    List, add/edit, word detail, pronunciation, recordings
+  Features/Alphabet/      Alphabet grid, letter voice recordings, word tray
+MyRussianWidget/          Lock-screen widget extension
+Config/                   Entitlements and the widget Info.plist
 MyRussianTests/           SwiftData integration tests
 MyRussianUITests/         Critical journeys
 scripts/                  TDD log runner, Xcode project generator
