@@ -133,7 +133,6 @@ widget_settings = {
     "GENERATE_INFOPLIST_FILE": "YES",
     "INFOPLIST_FILE": "Config/MyRussianWidget-Info.plist",
     "INFOPLIST_KEY_CFBundleDisplayName": "My Russian",
-    "INFOPLIST_KEY_NSHumanReadableCopyright": "",
     "LD_RUNPATH_SEARCH_PATHS": ["$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks"],
     "MARKETING_VERSION": "1.0",  # must match the app's
     "PRODUCT_BUNDLE_IDENTIFIER": f"{BUNDLE_PREFIX}.MyRussian.Widget",
