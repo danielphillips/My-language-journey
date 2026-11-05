@@ -1280,3 +1280,35 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.030 seconds.
 ✔ Test run with 175 tests in 34 suites passed after 0.032 seconds.
 ```
+
+### RED: random widget word, twice-daily rotation, weighting
+
+`swift test` → exit 1
+
+```
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:130:17: error: cannot find 'WordRotation' in scope
+    |                 `- error: cannot find 'WordRotation' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:131:17: error: cannot find 'WordRotation' in scope
+    |                 `- error: cannot find 'WordRotation' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:132:17: error: cannot find 'WordRotation' in scope
+    |                 `- error: cannot find 'WordRotation' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:133:20: error: cannot find 'WordRotation' in scope
+    |                    `- error: cannot find 'WordRotation' in scope
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:191:38: error: value of type 'WidgetWord' has no member 'confidence'
+    |                                      `- error: value of type 'WidgetWord' has no member 'confidence'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:192:25: error: value of type 'WidgetSnapshot' has no member 'randomWord'
+    |                         `- error: value of type 'WidgetSnapshot' has no member 'randomWord'
+error: SwiftCompile normal x86_64 failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:141:125: error: extra argument 'confidence' in call
+    |                                                                                                                          `- error: extra argument 'confidence' in call
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:142:127: error: extra argument 'confidence' in call
+    |                                                                                                                            `- error: extra argument 'confidence' in call
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:143:127: error: extra argument 'confidence' in call
+    |                                                                                                                            `- error: extra argument 'confidence' in call
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:144:123: error: extra argument 'confidence' in call
+    |                                                                                                                         `- error: extra argument 'confidence' in call
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:145:124: error: extra argument 'confidence' in call
+    |                                                                                                                         `- error: extra argument 'confidence' in call
+error: Build failed
+error: fatalError
+```
