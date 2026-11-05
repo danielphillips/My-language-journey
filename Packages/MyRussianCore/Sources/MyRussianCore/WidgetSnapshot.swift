@@ -28,9 +28,13 @@ public struct WidgetWord: Codable, Hashable, Identifiable, Sendable {
     public let meaning: String
     public let pronunciations: [WidgetPronunciation]
     public let dateAdded: Date
+    /// `ConfidenceLevel` raw value. Optional so snapshots written by older builds still decode.
+    public let confidence: Int?
 
-    public init(id: String, russian: String, meaning: String, pronunciations: [WidgetPronunciation], dateAdded: Date) {
+    public init(id: String, russian: String, meaning: String, pronunciations: [WidgetPronunciation], dateAdded: Date,
+                confidence: Int? = nil) {
         self.id = id
+        self.confidence = confidence
         self.russian = russian
         self.meaning = meaning
         self.pronunciations = pronunciations
@@ -39,7 +43,7 @@ public struct WidgetWord: Codable, Hashable, Identifiable, Sendable {
 
     public init<Item: VocabularyItem>(item: Item, pronunciations: [WidgetPronunciation]) where Item.ID == UUID {
         self.init(id: item.id.uuidString, russian: item.russian, meaning: item.meaning,
-                  pronunciations: pronunciations, dateAdded: item.dateAdded)
+                  pronunciations: pronunciations, dateAdded: item.dateAdded, confidence: item.confidence.rawValue)
     }
 
     /// "🇫🇷 Kadé": the first personal pronunciation, verbatim.
@@ -69,14 +73,6 @@ public struct WidgetSnapshot: Codable, Equatable, Sendable {
 
     public init(words: [WidgetWord]) {
         self.words = words
-    }
-
-    /// The chosen word if it still exists, otherwise your most recently added word.
-    public func resolve(selectedID: String?) -> WidgetWord? {
-        if let selectedID, let chosen = words.first(where: { $0.id == selectedID }) {
-            return chosen
-        }
-        return suggested().first
     }
 
     /// Most recently added first, for the widget's word picker.

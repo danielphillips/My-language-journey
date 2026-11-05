@@ -185,6 +185,21 @@ struct RandomWordTests {
         }
     }
 
+    @Test func oneLearningWordAmongFewOthersStillNeverRepeats() {
+        // Weight 3 against two words of weight 1 can't be spread out; the weight is capped instead.
+        let small = WidgetSnapshot(words: [snapshot.words[0], snapshot.words[2], snapshot.words[4]])
+        for slot in 0..<300 {
+            #expect(small.randomWord(forSlot: slot)?.id != small.randomWord(forSlot: slot + 1)?.id, "slot \(slot)")
+        }
+    }
+
+    @Test func aLearningWordAndAConfidentWordAlternate() {
+        let pair = WidgetSnapshot(words: [snapshot.words[0], snapshot.words[2]])
+        for slot in 0..<20 {
+            #expect(pair.randomWord(forSlot: slot)?.id != pair.randomWord(forSlot: slot + 1)?.id)
+        }
+    }
+
     @Test func snapshotsWrittenBeforeConfidenceExistedStillLoad() throws {
         let old = #"{"version":1,"words":[{"id":"x","russian":"кот","meaning":"cat","pronunciations":[],"dateAdded":"2026-11-01T00:00:00Z"}]}"#
         let decoded = try WidgetSnapshot.decode(Data(old.utf8))
