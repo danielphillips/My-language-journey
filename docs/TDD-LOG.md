@@ -1228,3 +1228,23 @@ error: fatalError
 ✔ Suite "Recording flow" passed after 0.024 seconds.
 ✔ Test run with 172 tests in 33 suites passed after 0.025 seconds.
 ```
+
+### RED: lock-screen pronunciation labels
+
+`swift test` → exit 1
+
+```
+error: SwiftCompile normal x86_64 /home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift failed with a nonzero exit code. Command line:     cd /home/user/My-language-journey/Packages
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:73:70: error: value of type 'WidgetPronunciation' has no member 'languageLabel'
+   |                                                              `- error: value of type 'WidgetPronunciation' has no member 'languageLabel'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:74:84: error: value of type 'WidgetPronunciation' has no member 'languageLabel'
+   |                                                                            `- error: value of type 'WidgetPronunciation' has no member 'languageLabel'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:75:70: error: value of type 'WidgetPronunciation' has no member 'languageLabel'
+   |                                                               `- error: value of type 'WidgetPronunciation' has no member 'languageLabel'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:82:22: error: value of type 'WidgetWord' has no member 'lockScreenPronunciationLine'
+   |                      `- error: value of type 'WidgetWord' has no member 'lockScreenPronunciationLine'
+/home/user/My-language-journey/Packages/MyRussianCore/Tests/MyRussianCoreTests/WidgetSnapshotTests.swift:88:22: error: value of type 'WidgetWord' has no member 'lockScreenPronunciationLine'
+   |                      `- error: value of type 'WidgetWord' has no member 'lockScreenPronunciationLine'
+error: Build failed
+error: fatalError
+```

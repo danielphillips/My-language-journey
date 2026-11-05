@@ -66,3 +66,25 @@ struct WidgetSnapshotTests {
         #expect(word.inlineText == "где · Kadé")
     }
 }
+
+@Suite("Lock-screen pronunciation line")
+struct LockScreenPronunciationTests {
+    @Test func flagsBecomeShortLanguageLabelsBecauseTheLockScreenTintsEmojiIntoBlocks() {
+        #expect(WidgetPronunciation(text: "Kadé", flag: "🇫🇷").languageLabel == "FR")
+        #expect(WidgetPronunciation(text: "patria sayou chayâ", flag: "🇧🇷").languageLabel == "PT")
+        #expect(WidgetPronunciation(text: "gdyeh", flag: "🇬🇧").languageLabel == "EN")
+    }
+
+    @Test func lockScreenLineUsesTheLabelAndKeepsTheSpellingVerbatim() {
+        let word = WidgetWord(id: "1", russian: "Потрясающе", meaning: "Stunning",
+                              pronunciations: [WidgetPronunciation(text: "patria sayou chayâ", flag: "🇧🇷")],
+                              dateAdded: .now)
+        #expect(word.lockScreenPronunciationLine == "PT · patria sayou chayâ")
+    }
+
+    @Test func unknownFlagsAreLeftOutRatherThanGuessed() {
+        let word = WidgetWord(id: "1", russian: "кот", meaning: "cat",
+                              pronunciations: [WidgetPronunciation(text: "kot", flag: "🏳️")], dateAdded: .now)
+        #expect(word.lockScreenPronunciationLine == "kot")
+    }
+}
